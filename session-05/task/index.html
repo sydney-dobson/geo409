@@ -55,8 +55,8 @@
 
 <body>
     <header>
-        <h1>Map Title</h1>
-        <h2>Map Subtitle</h2>
+        <h1>Major Cities</h1>
+        <h2>Kentucky</h2>
     </header>
 
     <div id='map'></div>
@@ -87,27 +87,24 @@
         
         // begin writing/editing Task D code here
         
-        var citiesArray = ["Frankfort","Louisville","Lexington"];
-        var capitolCity = [
-            ["Frankfort", true],   
-            ["Louisville", false],
-            ["Lexington", false]
-        ];
+        var cities = ["Frankfort","Louisville","Lexington"];
+        var capitolCity =  [true, false, false]
         var cityCoords = [
-            [38.1970,38.2500,38.0297],
-            [-84.8630,-85.7667,-84.4947]
+            [38.1970, -84.8630],
+            [38.2500, -85.7667],
+            [38.0297, -84.4947]
         ];
         var cityPopArray = [27453,253128,308428]
         console.log("before the for loop");
-        for(var i = 0;i<citiesArray.length + 1; i++)
+        for(var i = 0;i<cities.length; i++)
         //console.log(i); 
        // console.log(citiesArray[i]);
         {
             
-            var popup = "<b>"+/* add code here */+"</b><br>"
-                            +"<b>population</b>: "+/* add code here */;
+            var popup = "<b>"+cities[i]+"</b><br>"
+                            +"<b>population</b>: "+cityPopArray[i];
 
-            if(/* add code here */ == true) {
+            if(capitolCity[i] == true) {
                
                 popup += "<br>Capitol of the Commonwealth of Kentucky"; 
                 
