@@ -84,8 +84,6 @@
         
         // begin writing/editing Task E code here
         
-        var cities = ["Lexington","Louisville","Frankfort"];
-        
         var lexArea = 285.5;
         var louisArea = 399;
         var frankArea = 14.63;
@@ -93,31 +91,39 @@
         prepareData(lexArea); // modify function call to pass 2 additional
                               // arguments
         
-        function prepareData(lexArea) { /* include 2 more parameters here */
+        function prepareData(lexArea, louisArea, frankArea) { /* include 2 more parameters here */
             
-            var cities = ["Lexington"]; /* include 2nd and 3rd city names */
+            var cities = ["Lexington", "Louisville","Frankfort"]; /* include 2nd and 3rd city names */
+            
             var cityCoords = [
                 [38.0297, -84.4947] 
-                /* include 2nd city lat/lon here */
-                /* include 3rd city lat/lon here */
-                
+                [38.2500, -85.7667],
+                [38.1970, -84.8630],
             ];
-            var cityPops = [308428]; /* include 2nd and 3rd city pops here */
             
-            var cityAreas = [lexArea]; /* include 2nd and 3rd city areas */
+            var cityPops = [308428, 253128, 27453]; /* include 2nd and 3rd city pops here */
+           
+            var cityAreas = [lexArea,louisArea,frankArea]; /* include 2nd and 3rd city areas */
                     
             mapCities(cities, cityCoords); // modify function call to pass 2 additional
                                            // arguments
             
         }
             
-        function mapCities(cities, cityCoords) { /* include 2 more parameters here */
+        function mapCities(cities, cityCoords, cityPops, cityAreas) { /* include 2 more parameters here */
             
             var units = 'miles';
             
             for(var i = 0; i < cities.length; i++) {
+                
+               function calcPopDensity
+                var popDensity= cityPops/cityAreas
+                console.log(popDensity)
+                
+                
 
-                /*var density =  call a function named calcPopDensity here, passing
+                *var density =  call a function named calcPopDensity here, passing
+                calc
                                  the city population and area as arguments, and assign
                                  return value to the "density" variable */
 
