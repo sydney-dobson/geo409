@@ -85,6 +85,55 @@
             console.log("Hello Map")
         };
         
+        function saySomething(message) {
+    console.log(message);
+}
+
+saySomething("Hello Map");
+saySomething("My iguana has dreamy eyes.");
+saySomething("Why are these people so obsessed with iguanas?");
+        function calcAreaRect(width,height){
+    var area = width * height;
+    console.log(area);
+}
+
+var width = 40;
+var height = 30
+calcAreaRect(width,height);
+        
+        function sayThings() {
+
+    console.log("thing 1"); 
+    console.log("thing 2"); 
+    return                  
+    console.log("thing 3");
+}
+        
+        function getMultiValues() {
+    var value1 = 5;
+    var value2 = "iguana";
+    return [value1, value2];
+}
+
+var values = getMultiValues();
+console.log(values[0]); 
+console.log(values[1]);
+        
+        saySomething("Hello Map, Again.");
+        var saySomething = function(message) {
+    console.log(message);}
+
+        function outerFunction(message) {
+    console.log(message)
+    var innerFunction = function(message) {
+
+        console.log(message)
+    }
+    innerFunction("I'm inside outerFunction!");
+}
+outerFunction("hi there");
+        
+        
     </script>
     
 </body>
