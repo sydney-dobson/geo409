@@ -88,7 +88,7 @@
         var louisArea = 399;
         var frankArea = 14.63;
         
-        prepareData(lexArea); // modify function call to pass 2 additional
+        prepareData(lexArea, louisArea, frankArea); // modify function call to pass 2 additional
                               // arguments
         
         function prepareData(lexArea, louisArea, frankArea) { /* include 2 more parameters here */
@@ -116,17 +116,11 @@
             
             for(var i = 0; i < cities.length; i++) {
                 
-               function calcPopDensity
-                var popDensity= cityPops/cityAreas
-                console.log(popDensity)
-                
-                
-
-     *var density =  call a function named calcPopDensity here, passing
-    calc the city population and area as arguments, and assign return                   value to the "density" variable */
-
+              
                 var popup = "<b>"+cities[i]+"</b><br>"
-                                //+"<b>Density</b>: "+density.toLocaleString()+" people per sq " + units;
+                +"<b>Density</b>: "+density[i].toLocaleString()+" people per sq "       + units;
+
+    
 
                 L.marker(cityCoords[i]).addTo(map)
                     .bindPopup(popup);
@@ -139,7 +133,20 @@
         // write a function named calcPopDensity which accepts two arguments from the caller, the  
         // population and the area of a single city. The function should calculate the density
         // of the city with these two values and return the result to the caller 
-        
+         function calcPopDensity(cityPops, cityAreas, units) {
+             var densitySingle = [];
+             if(units == "miles") {
+                 for (var i = 0; i < cityPops.length; i++) {
+                     densitySingle[i] = cityPops[i] / cityAreas[i];
+                 }
+             }
+             else if (units == "km") {
+                 for (var i = 0; i < cityPops.length; i++) {
+                     densitySingle[i] = cityPops[i] / (cityAreas[i] * 2.59);
+                 }
+             }
+             return densitySingle;
+            }
 
         // end writing/editing Task E code here
           
