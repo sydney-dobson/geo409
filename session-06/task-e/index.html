@@ -96,27 +96,28 @@
             var cities = ["Lexington", "Louisville","Frankfort"]; /* include 2nd and 3rd city names */
             
             var cityCoords = [
-                [38.0297, -84.4947] 
+                [38.0297, -84.4947],
                 [38.2500, -85.7667],
-                [38.1970, -84.8630],
+                [38.1970, -84.8630]
             ];
             
             var cityPops = [308428, 253128, 27453]; /* include 2nd and 3rd city pops here */
            
-            var cityAreas = [lexArea,louisArea,frankArea]; /* include 2nd and 3rd city areas */
+            var cityAreas = [lexArea, louisArea, frankArea]; /* include 2nd and 3rd city areas */
                     
-            mapCities(cities, cityCoords); // modify function call to pass 2 additional
+            mapCities(cities, cityCoords, cityPops, cityAreas); // modify function call to pass 2 additional
                                            // arguments
             
         }
             
         function mapCities(cities, cityCoords, cityPops, cityAreas) { /* include 2 more parameters here */
-            
+       
             var units = 'miles';
             
             for(var i = 0; i < cities.length; i++) {
                 
-              
+              var density = calcPopDensity(cityPops[i],cityAreas[i],units);
+
                 var popup = "<b>"+cities[i]+"</b><br>"
                 +"<b>Density</b>: "+density[i].toLocaleString()+" people per sq "       + units;
 
@@ -133,20 +134,13 @@
         // write a function named calcPopDensity which accepts two arguments from the caller, the  
         // population and the area of a single city. The function should calculate the density
         // of the city with these two values and return the result to the caller 
-         function calcPopDensity(cityPops, cityAreas, units) {
-             var densitySingle = [];
-             if(units == "miles") {
-                 for (var i = 0; i < cityPops.length; i++) {
-                     densitySingle[i] = cityPops[i] / cityAreas[i];
-                 }
-             }
-             else if (units == "km") {
-                 for (var i = 0; i < cityPops.length; i++) {
-                     densitySingle[i] = cityPops[i] / (cityAreas[i] * 2.59);
-                 }
-             }
-             return densitySingle;
-            }
+        function calcPopDensity(pop,area,units) {
+if(units == 'miles') {
+return pop/area;
+} else if(units == 'km') {
+return pop/(area*1.60934*1.60934); // multiply conversion twice to account for sq
+}
+}
 
         // end writing/editing Task E code here
           
