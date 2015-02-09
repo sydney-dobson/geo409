@@ -104,7 +104,7 @@
             {
                 name:"Indianapolis",
                 properties: {
-                   coordinates: [39.46, 86.9],
+                   coordinates: [39.7910, -86.1480],
                    population: 852866,
                    state:"IN"
                 }
@@ -112,7 +112,7 @@
            {
                 name:"Cincinatti",
                 properties: {
-                   coordinates: [39.1000, 84.5167],
+                   coordinates: [39.1000, -84.5167],
                    population: 297517,
                    state:"OH"
                 }
@@ -120,11 +120,12 @@
         ];
         
         for(var i = 0; i < cities.length; i++){
-            console.log(cities[i]);
+            
+            console.log(cities[i].properties.population);
             
             var props = cities[i].properties;
         
-            var popup= buildPopup(name, props.population, props.state);
+            var popup= buildPopup(cities[i].name, props.population, props.state);
         
             L.marker(props.coordinates).addTo(map)
             .bindPopup(popup); 
@@ -132,7 +133,7 @@
         
         
         
-    function buildPopup (name, population, state) {
+    function buildPopup (name, pop, state) {
     
         if(state=="KY") {
             var colorClass = "blue";
@@ -143,8 +144,7 @@
         if(state=="OH") {
             var colorClass = "purple";
         }
-        console.log(colorClass);
-        
+       
         return "<div class='"+colorClass+"'><b>"+name+"</b><br>"+"<b>Population</b>: "+pop.toLocaleString()+"<div>";
         
     }
