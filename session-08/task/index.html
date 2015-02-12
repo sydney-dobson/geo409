@@ -52,8 +52,8 @@
 
 <body>
     <header>
-        <h1>Map Title</h1>
-        <h2>Map Subtitle</h2>
+        <h1>MaPPP</h1>
+        <h2>This map was hard</h2>
     </header>
 
     <div id='map'></div>
@@ -80,6 +80,10 @@
     minZoom: 4,
 	maxZoom: 12
 });
+         var mapcenter = L.latlng[40,-94]
+        
+        var redIguana = L.latLng(40.7718,-111.9124);
+        
         var bounds = map.getBounds();
         console.log(bounds);
         
@@ -88,8 +92,7 @@
     map.on('click', function(e){
    // 'click'(e.latlng:);   
         
-      var mapcenter = L.latlng(40,-94);
-    var redIguana = L.latLng(40.7718,-111.9124);
+     
        console.log(center);
         
     });
