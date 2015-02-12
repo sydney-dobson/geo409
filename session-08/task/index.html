@@ -87,21 +87,26 @@
             //console.log(e.latlng);
             var click = e.latlng; 
             var distance = click.distanceTo(redIguana);
-            console.log(distance);
+          //  console.log("you clicked", distance, "meters from red Iguana");
+            
+        map.setView(click, 6);
      
     });
-        var bounds = map.getBounds();
-            console.log(bounds);
+        var swCorner = map.getBounds().getSouthWest();
         
-        var bottomLeft = bounds.getSouthWest();
+         var distance2 = swCorner.distanceTo(redIguana);
+        console.log("red iguana is", distance2, "meters from the sw corner");
         
-   console.log(bottomLeft.lat, bottomLeft.lng);
+           //console.log("SW", bounds);
+        
+      //  var bottomLeft = bounds.getSouthWest();
+        
+  // console.log(bottomLeft.lat, bottomLeft.lng);
         map.on()
         
-    var southWest = bounds.getSouthWest();
+   // var southWest = bounds.getSouthWest();
         
-  var distance2 = southWest.distanceTo(redIguana);
-        console.log(distance2)
+ 
             
     </script>
     
