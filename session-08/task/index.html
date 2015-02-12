@@ -66,17 +66,37 @@
     </footer>
 
     <script>
+        var map;
+        var targetDiv = 'map';
+        var options = {
+        center:[40,-94],
+        zoom: 5
+        }
 
-    var map = L.map('map', {
-        center: [40,-94],
-        zoom: 4
-    });
-                
-    var redIguana = L.latLng(40.7718,-111.9124);
+        map = L.map(targetDiv, options);
         
+        var OpenStreetMap_DE = L.tileLayer('http://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    minZoom: 4,
+	maxZoom: 12
+});
+        var bounds = map.getBounds();
+        console.log(bounds);
+        
+    map.addLayer(OpenStreetMap_DE);
+  
     map.on('click', function(e){
-        console.log(e.latlng);   
+   // 'click'(e.latlng:);   
+        
+      var mapcenter = L.latlng(40,-94);
+    var redIguana = L.latLng(40.7718,-111.9124);
+       console.log(center);
+        
     });
+      //  var distance = mapCenter.distanceTo(redIguana);
+        console.log(distance);
+        
+        var bottomLeft = bounds.getSouthWest(); 
                   
     </script>
     
