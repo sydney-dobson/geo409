@@ -84,25 +84,28 @@
         var redIguana = L.latLng(40.7718,-111.9124);
         
         map.on('click', function(e){
-            console.log(e.latlng);
+            //console.log(e.latlng);
             var click = e.latlng; 
             var distance = click.distanceTo(redIguana);
-          //  console.log("you clicked", distance, "meters from red Iguana");
+            console.log("you clicked " + distance + " meters from red Iguana");
             
-        map.setView(click, 6);
-     
-    });
+        map.setView(click, 6); // nice!
+            
+            // bring swCorner stuff inside the click function
+            
         var swCorner = map.getBounds().getSouthWest();
         
          var distance2 = swCorner.distanceTo(redIguana);
         console.log("red iguana is", distance2, "meters from the sw corner");
+    });
+        
         
            //console.log("SW", bounds);
         
       //  var bottomLeft = bounds.getSouthWest();
         
   // console.log(bottomLeft.lat, bottomLeft.lng);
-        map.on()
+
         
    // var southWest = bounds.getSouthWest();
         
