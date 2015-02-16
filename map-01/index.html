@@ -68,6 +68,19 @@
     <script>
 
  // Step 1 and 2 here
+        var map;
+        var targetDiv = 'map';
+        var options = {
+        zoom: 11,
+        center: [-37.8136, 144.9631]
+        }
+
+        map = L.map(targetDiv, options);
+        var OpenStreetMap_Mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+});
+         map.addLayer(OpenStreetMap_Mapnik);
+
         
         var iguanaZones = [
             {
