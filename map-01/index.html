@@ -81,7 +81,21 @@
 });
          map.addLayer(OpenStreetMap_Mapnik);
 
-        
+//        var redIguanaLocation = L.latLng(40.7718,-111.9124);
+//    var redIguanaCircle = L.circle(redIguanaLocation, 400, {
+//        color: "#d72b1e",  // changes the stroke color
+//        fillColor: "#d72b1e"  // changes the fill color
+//    });
+//    redIguanaCircle.addTo(map);
+//        
+//        var redIguanaLocation = L.latLng(40.7718,-111.9124);
+//    var redIguanaCircle = L.circle(redIguanaLocation, 400, {
+//        color: "#d72b1e",  // changes the stroke color
+//        fillColor: "#d72b1e"  // changes the fill color
+//    });
+//    redIguanaCircle.addTo(map);
+//        
+       
         var iguanaZones = [
             {
                 name: 'lz1',
@@ -169,9 +183,78 @@
             }
         ]; // end iguanaShips data
         
+  var iguanaAttacks = L.layerGroup();
         
-//      steps 3 here
+        var lizard1 = L.circle([-37.854506, 144.797431], 1850);
+       lizard1.addTo(iguanaAttacks);
+        
+        var iguana2 = L.circle([-37.749253, 144.855108], 2500);
+        iguana2.addTo(iguanaAttacks);
+        iguanaAttacks.addTo(map);
+     
+         var iguana3 = L.circle([-37.770967, 144.943686], 2150);
+        iguana2.addTo(iguanaAttacks);
+        iguanaAttacks.addTo(map);
+     
+         var iguana4 = L.circle([-37.720472, 145.002051], 2000);
+        iguana2.addTo(iguanaAttacks);
+        iguanaAttacks.addTo(map);
+     
+         var iguana5 = L.circle([-37.774767, 145.033635], 2500);
+        iguana2.addTo(iguanaAttacks);
+        iguanaAttacks.addTo(map);
+     
+         var iguana6 = L.circle([-37.827394, 145.040503], 2350);
+        iguana2.addTo(iguanaAttacks);
+        iguanaAttacks.addTo(map);
+     
+         var iguana7 = L.circle([-37.767711, 145.116720], 1100);
+        iguana2.addTo(iguanaAttacks);
+        iguanaAttacks.addTo(map);
+     
+         var iguana8 = L.circle([-37.829563, 145.129767], 1450);
+        iguana2.addTo(iguanaAttacks);
+        iguanaAttacks.addTo(map);
+     
+         var iguana9 = L.circle([-37.779108, 145.749365], 950);
+        iguana2.addTo(iguanaAttacks);
+        iguanaAttacks.addTo(map);
+     
+         var iguana10 = L.circle([-37.868059, 145.0714022], 2000);
+        iguana2.addTo(iguanaAttacks);
+        iguanaAttacks.addTo(map);
+     
+         var iguana11 = L.circle([-37.932565, 145.080328], 1700);
+        iguana2.addTo(iguanaAttacks);
+        iguanaAttacks.addTo(map);
+     
+         var iguana12 = L.circle([-37.873479, 145.1963717], 1200);
+        iguana2.addTo(iguanaAttacks);
+        iguanaAttacks.addTo(map);
+     
+         iguanaAttacks.eachLayer(function(layer) {
+        layer.on('mouseover', function(e) {
+           e.target.setStyle({
+               color: 'yellow',
+               fillColor: 'yellow'
+           });
+        });
+        layer.on('mouseout', function(e) {
+            e.target.setStyle({
+               color: '#03f',
+               fillColor: '#03f'
+            });
+        });
+    });
+
+        console.log("before the for loop");
+        
+        for(var i = 0; i < iguanaZones.length; i++)
+            iguanaAreas[i]=i + 1
+        while (i < iguanaZones.length)
+            console.log("after the for loop");
 //      steps 4-6  here
+            
             
         var marker;  // keep this code
        
