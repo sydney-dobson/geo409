@@ -68,34 +68,18 @@
     <script>
 
  // Step 1 and 2 here
-        var map;
+         var map = L.map(targetDiv, options);
         var targetDiv = 'map';
         var options = {
         zoom: 11,
-        center: [-37.8136, 144.9631]
+        center: [-37.8136, 144.9631],
         }
 
-        map = L.map(targetDiv, options);
         var OpenStreetMap_Mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 });
          map.addLayer(OpenStreetMap_Mapnik);
 
-//        var redIguanaLocation = L.latLng(40.7718,-111.9124);
-//    var redIguanaCircle = L.circle(redIguanaLocation, 400, {
-//        color: "#d72b1e",  // changes the stroke color
-//        fillColor: "#d72b1e"  // changes the fill color
-//    });
-//    redIguanaCircle.addTo(map);
-//        
-//        var redIguanaLocation = L.latLng(40.7718,-111.9124);
-//    var redIguanaCircle = L.circle(redIguanaLocation, 400, {
-//        color: "#d72b1e",  // changes the stroke color
-//        fillColor: "#d72b1e"  // changes the fill color
-//    });
-//    redIguanaCircle.addTo(map);
-//        
-       
         var iguanaZones = [
             {
                 name: 'lz1',
@@ -183,102 +167,88 @@
             }
         ]; // end iguanaShips data
         
-  var iguanaAttacks = L.layerGroup();
+          var mainCircle = {
+              color: 'blue',
+              fillColor: 'blue'
+          };
+        var secondCircle = {
+            color: 'red',
+            fillColor: 'red'
+        };
         
-        var lizard1 = L.circle([-37.854506, 144.797431], 1850);
-       lizard1.addTo(iguanaAttacks);
+        var defaultCircle = {
+    color: '#03f',
+    fillColor: '#03f'
+    };
+    var highlightCircle = {
+    color: 'red',
+    fillColor: 'red'
+    };
+   
         
-        var iguana2 = L.circle([-37.749253, 144.855108], 2500);
-        iguana2.addTo(iguanaAttacks);
-        iguanaAttacks.addTo(map);
-     
-         var iguana3 = L.circle([-37.770967, 144.943686], 2150);
-        iguana2.addTo(iguanaAttacks);
-        iguanaAttacks.addTo(map);
-     
-         var iguana4 = L.circle([-37.720472, 145.002051], 2000);
-        iguana2.addTo(iguanaAttacks);
-        iguanaAttacks.addTo(map);
-     
-         var iguana5 = L.circle([-37.774767, 145.033635], 2500);
-        iguana2.addTo(iguanaAttacks);
-        iguanaAttacks.addTo(map);
-     
-         var iguana6 = L.circle([-37.827394, 145.040503], 2350);
-        iguana2.addTo(iguanaAttacks);
-        iguanaAttacks.addTo(map);
-     
-         var iguana7 = L.circle([-37.767711, 145.116720], 1100);
-        iguana2.addTo(iguanaAttacks);
-        iguanaAttacks.addTo(map);
-     
-         var iguana8 = L.circle([-37.829563, 145.129767], 1450);
-        iguana2.addTo(iguanaAttacks);
-        iguanaAttacks.addTo(map);
-     
-         var iguana9 = L.circle([-37.779108, 145.749365], 950);
-        iguana2.addTo(iguanaAttacks);
-        iguanaAttacks.addTo(map);
-     
-         var iguana10 = L.circle([-37.868059, 145.0714022], 2000);
-        iguana2.addTo(iguanaAttacks);
-        iguanaAttacks.addTo(map);
-     
-         var iguana11 = L.circle([-37.932565, 145.080328], 1700);
-        iguana2.addTo(iguanaAttacks);
-        iguanaAttacks.addTo(map);
-     
-         var iguana12 = L.circle([-37.873479, 145.1963717], 1200);
-        iguana2.addTo(iguanaAttacks);
-        iguanaAttacks.addTo(map);
-     
-         iguanaAttacks.eachLayer(function(layer) {
-        layer.on('mouseover', function(e) {
-           e.target.setStyle({
-               color: 'yellow',
-               fillColor: 'yellow'
-           });
-        });
-        layer.on('mouseout', function(e) {
-            e.target.setStyle({
-               color: '#03f',
-               fillColor: '#03f'
-            });
-        });
+    var circleGroup = L.layerGroup();
+        
+    for(var i = 0; i < iguanaZones.length; i++) {
+        
+    var coords = iguanaZones[i].coordinates;
+        
+
+    var radius = iguanaZones[i].properties.size;
+        
+    L.circle(coords, radius).addTo(circleGroup);
+    
+    };
+    circleGroup.addTo(map);
+        
+    var marker = {
+        
+    safeDistance: true
+        
+    }; // keep this code
+        
+    map.on('click', function(e){
+        
+    if(marker.safeDistance == false) {
+        
+    map.removeLayer(marker)
+    
+    };
+        
+    var clickPoint = e.latlng;
+        
+    L.marker(clickPoint);
+   
+    marker.safeDistance = true;
+        
+    testDistance(clickPoint);
     });
-
-        console.log("before the for loop");
         
-        for(var i = 0; i < iguanaZones.length; i++)
-            iguanaAreas[i]=i + 1
-        while (i < iguanaZones.length)
-            console.log("after the for loop");
-//      steps 4-6  here
-            
-            
-        var marker;  // keep this code
-       
-        map.on('click', function(e) {  // keep this code
-
-// uncomment this code after step seven is finished          
-//            if(map.hasLayer(marker)) {               
-//                map.removeLayer(marker);
-//            }
-
-//              step seven here            
-//              step eight here
-            
-        });  // keep this code
+    function testDistance(clickPoint) {
         
-        function testDistance() {
-            
-            iguanaGroup.eachLayer(function(layer) {
-//              step 9 here
-//              step 10 here
-            });
-        }
+    circleGroup.eachLayer(function(layer) {
         
-// end map1 code
+    var radius = layer.getRadius();
+ 
+    var center = layer.getLatLng();
+
+    var firstDistance = center.distanceTo(clickPoint);
+        
+    var realDistance = (firstDistance - radius);
+    
+        
+        if(realDistance < 2200) {
+        
+    layer.setStyle(highlightCircle);
+        
+    return marker.safeDistance = false;
+    }
+        
+        else if (realDistance > 2200) {
+    layer.setStyle(defaultCircle);
+    };
+   
+    });
+    }
         
     </script>
     
