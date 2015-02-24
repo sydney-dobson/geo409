@@ -186,54 +186,54 @@
     };
    
         
-    var circleGroup = L.layerGroup();
+        var circleGroup = L.layerGroup();
         
     for(var i = 0; i < iguanaZones.length; i++) {
         
-    var coords = iguanaZones[i].coordinates;
+        var coords = iguanaZones[i].coordinates;
         
 
-    var radius = iguanaZones[i].properties.size;
-        
+        var radius = iguanaZones[i].properties.size;
+            
     L.circle(coords, radius).addTo(circleGroup);
     
     };
-    circleGroup.addTo(map);
+        circleGroup.addTo(map);
         
-    var marker = {
+        var marker = {
         
-    safeDistance: true
+            safeDistance: true
         
     }; // keep this code
         
-    map.on('click', function(e){
+        map.on('click', function(e){
         
-    if(marker.safeDistance == false) {
-        
-    map.removeLayer(marker)
-    
+            if(marker.safeDistance == false) {
+         
+                map.removeLayer(marker)
+     
     };
         
-    var clickPoint = e.latlng;
+            var clickPoint = e.latlng;
         
-    L.marker(clickPoint);
+            L.marker(clickPoint);
    
-    marker.safeDistance = true;
+            marker.safeDistance = true;
         
-    testDistance(clickPoint);
+            testDistance(clickPoint);
     });
         
-    function testDistance(clickPoint) {
+        function testDistance(clickPoint) {
         
-    circleGroup.eachLayer(function(layer) {
+            circleGroup.eachLayer(function(layer) {
         
-    var radius = layer.getRadius();
- 
-    var center = layer.getLatLng();
+              var radius = layer.getRadius();
+    
+              var center = layer.getLatLng();
 
-    var firstDistance = center.distanceTo(clickPoint);
-        
-    var realDistance = (firstDistance - radius);
+              var firstDistance = center.distanceTo(clickPoint);
+    
+              var realDistance = (firstDistance - radius);
     
         
         if(realDistance < 2200) {
