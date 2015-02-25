@@ -68,11 +68,9 @@
     <script>
 
  // Step 1 and 2 here
-         var map = L.map(targetDiv, options);
-        var targetDiv = 'map';
-        var options = {
+         var map = L.map('map',{
         zoom: 11,
-        center: [-37.8136, 144.9631],
+        center: [-37.8136, 144.9631]
         }
 
         var OpenStreetMap_Mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -177,29 +175,32 @@
         };
    
         
-        var circleGroup = L.layerGroup();
+        var iguanaGroup = L.layerGroup();
         
-    for(var i = 0; i < iguanaZones.length; i++) {
+    for(var i=0;i<iguanaZones.length; i++) {
         
-        var coords = iguanaZones[i].coordinates;
-        
-
-        var radius = iguanaZones[i].properties.size;
-            
-    L.circle(coords, radius).addTo(circleGroup);
-    
-    };
+         var iguanaColony = L.circle(iguanaZones[i].coordinates,
+iguanaZones[i].properties.size,
+iguanaOptions)
+.addTo(iguanaGroup);
+}
+//        var coords = iguanaZones[i].coordinates;
+//        
+//
+//        var radius = iguanaZones[i].properties.size;
+//            
+//    L.circle(coords, radius).addTo(circleGroup);
+//    
+//    };
         circleGroup.addTo(map);
         
-        var marker = {
-        
-            safeDistance: true
+        var marker; 
         
     }; // keep this code
         
         map.on('click', function(e){
         
-            if(marker.safeDistance == false) {
+            if(marker.hasLayer(marker)) {
          
                 map.removeLayer(marker)
      
@@ -209,33 +210,26 @@
         
             L.marker(clickPoint);
    
-            marker.safeDistance = true;
+            marker = L.marker(clickPoint).addTo(map);
         
             testDistance(clickPoint);
     });
         
         function testDistance(clickPoint) {
         
-            circleGroup.eachLayer(function(layer) {
+            iguanaGroup.eachLayer(function(layer) {
         
-              var radius = layer.getRadius();
+                var distance = clickPoint.distanceTo(layer.getLatLng());
+             
+                distance = distance - layer.getRadius();
     
               var center = layer.getLatLng();
-
-              var firstDistance = center.distanceTo(clickPoint);
+        
+        if(Distance < 2200) {
     
-              var realDistance = (firstDistance - radius);
-    
-        
-        if(realDistance < 2200) {
-        
-    layer.setStyle(highlightCircle);
-        
-    return marker.safeDistance = false;
-    }
-        
-        else if (realDistance > 2200) {
-    layer.setStyle(defaultCircle);
+            layer.setStyle(iguanaThreatOptions);
+    } else {
+        layer.setStyle(defaultCircle);
     };
    
     });
