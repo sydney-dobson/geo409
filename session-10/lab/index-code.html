@@ -130,8 +130,6 @@
           ]
         }
         var placesLGeoJson = L.geoJson(places).addTo(map);
-//        console.log(places);
-        console.log(placesLGeoJson);
         var placesLGeoJson = L.geoJson(places, {
             pointToLayer : function(feature, latlng) {
                 return L.circle(latlng, feature.properties.size);
