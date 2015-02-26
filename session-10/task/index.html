@@ -80,7 +80,8 @@
         var map = L.map('map', {
             center: [ 2.774, 32.2973
                     ],
-            zoom: 13,
+            zoom: 15,
+            zoom: 15,
         });
        
         var tiles = L.tileLayer('http://a{s}.acetate.geoiq.com/tiles/acetate-hillshading/{z}/{x}/{y}.png', {
@@ -92,7 +93,7 @@
         map.addLayer(tiles);
         
         // Begin writing/modifying code for Task H here
-        
+
 var myFeatures = {
   "type": "FeatureCollection",
   "features": [
@@ -104,7 +105,7 @@ var myFeatures = {
         "marker-symbol": "",
         "name": "my old house",
         "description ": "where i lived in Uganda",
-        "radius": 20
+        "radius": 50
       },
       "geometry": {
         "type": "Point",
@@ -122,7 +123,7 @@ var myFeatures = {
         "marker-symbol": "",
         "name": "Uchumi Grocery",
         "description": "the main grocery store in Gulu",
-        "radius": 10
+        "radius": 45
       },
       "geometry": {
         "type": "Point",
@@ -139,6 +140,7 @@ var myFeatures = {
         "marker-size": "medium",
         "marker-symbol": "",
         "name": "Abyssinia",
+         "radius": 60,
         "description": "my favorite ethiopian restaurant"
       },
       "geometry": {
@@ -220,56 +222,42 @@ var myFeatures = {
   ]
 };  
         
-var myFeatures = L.geoJson(places).addTo(map);
+//var guluPlaces = L.geoJson(myFeatures).addTo(map);
         
     var pointOptions = {
         color: "orange"
-    },
+    };
     var lineOptions = {
         color: "green"  
-    },
+    };
     var polygonOptions = {
-        color: "blue"  },
+        color: "blue"  };
         
     var guluFeatures = L.geoJson(myFeatures, {
         pointToLayer : function(feature, latlng) {
-            return L.circle(latlng, feature.properties.size);
+           
+        return L.circle(latlng, feature.properties.radius);
         },
-        onEachFeature: function(feature, layer) {
-            if(feature.geometry.type == "Point") {
-                layer.setStyle(pointOptions);
-            }
-            if(feature.geometry.type == "LineString") {
-                layer.setStyle(lineOptions);
-            }   
-            if(feature.geometry.type == "Polygon") {
-                layer.setStyle(polygonOptions);
-            }
-        }
-    }).addTo(map);
+        style : function(feature) {
+            return { dashArray: "5, 10",
+                     weight: 5
+                   }
         
-onEachFeature: function(feature, layer) {
+        },
+ onEachFeature: function(feature, layer) {
             if(feature.geometry.type == "Point") {
                 layer.setStyle(pointOptions);
-                layer.bindPopup("I am a "+feature.geometry.type+ " Feature")
+                layer.bindPopup("I am a "+feature.geometry.type+ " Feature");
             }
             if(feature.geometry.type == "LineString") {
                 layer.setStyle(lineOptions);
-                layer.bindPopup("I am a "+feature.geometry.type+ " Feature")
+                layer.bindPopup("I am a "+feature.geometry.type+ " Feature");
             }   
             if(feature.geometry.type == "Polygon") {
                 layer.setStyle(polygonOptions);
                 layer.bindPopup("I am a "+feature.geometry.type+ " Feature");
         
-      var guluFeatures = L.geoJson(myFeatures, {
-        pointToLayer : function(feature, latlng) {
-            return L.circle(latlng, feature.properties.size);
-        },
-        style : function(feature) {
-            return { dashArray: "5, 10",
-                     weight: 2
-                   }   
-        },
+            }}}).addTo(map);
     </script>
     
 </body>
