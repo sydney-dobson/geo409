@@ -62,38 +62,214 @@
 
 <body>
     <header>
-        <h1>Map Title</h1>
-        <h2>Map Subtitle</h2>
+        <h1>Gulu</h1>
+        <h2>the places I often traveled</h2>
     </header>
 
     <div id='map'></div>
 
     <footer>
-        <p>Map authored by YOUR NAME</p>
-        <p>Additional information about the data and map goes here.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna magna, maximus nec laoreet sit amet, dictum ultricies nibh. Ut id auctor lacus. Nam a dolor et justo luctus luctus. Duis a elit eget risus dictum vehicula id eu elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed sed enim nisl. Vestibulum commodo imperdiet lacus, sed facilisis erat placerat sit amet. Nulla consequat malesuada neque eget aliquet. Integer non convallis nisl, gravida ultrices ex. Fusce nec vestibulum elit. Sed elementum lectus ipsum, vulputate elementum ex laoreet a. Aenean eu ex varius, varius felis vitae, efficitur nulla. Quisque pretium laoreet ante, in sodales dui vehicula at. Mauris eu sem sapien.
+        <p>Map authored by Sydney Dobson</p>
+        <p>This is my second home</p>
+        <p>One of my favorite places in the world.
         </p>
     </footer>
 
     <script>
 
         var map = L.map('map', {
-            center: [38.96,-85.36],
-            zoom: 8,
+            center: [ 2.774, 32.2973
+                    ],
+            zoom: 13,
         });
        
         var tiles = L.tileLayer('http://a{s}.acetate.geoiq.com/tiles/acetate-hillshading/{z}/{x}/{y}.png', {
             attribution: '&copy;2012 Esri & Stamen, Data from OSM and Natural Earth',
             subdomains: '0123',
             minZoom: 4,
-            maxZoom: 12
+            maxZoom: 16
         });
         map.addLayer(tiles);
         
         // Begin writing/modifying code for Task H here
         
-
-          
+var myFeatures = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "my old house",
+        "description ": "where i lived in Uganda",
+        "radius": 20
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.287445068359375,
+          2.7679816181691344
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "Uchumi Grocery",
+        "description": "the main grocery store in Gulu",
+        "radius": 10
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.29734778404236,
+          2.774443540599812
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "Abyssinia",
+        "description": "my favorite ethiopian restaurant"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.3003625869751,
+          2.7732647514112454
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#555555",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "fill": "#555555",
+        "fill-opacity": 0.5,
+        "name": "the market",
+        "description": "where to get your veggies!"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              32.291522026062005,
+              2.7739613088010655
+            ],
+            [
+              32.29553461074829,
+              2.774057755176545
+            ],
+            [
+              32.29557752609253,
+              2.7736291045586277
+            ],
+            [
+              32.294172048568726,
+              2.771442983991084
+            ],
+            [
+              32.29010581970215,
+              2.770928602094139
+            ],
+            [
+              32.291522026062005,
+              2.7739613088010655
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            32.28740215301513,
+            2.76816379556982
+          ],
+          [
+            32.292938232421875,
+            2.7727932354068527
+          ],
+          [
+            32.29735851287842,
+            2.774593568230418
+          ],
+          [
+            32.3003625869751,
+            2.7734790768056463
+          ]
+        ]
+      }
+    }
+  ]
+};  
+        
+var myFeatures = L.geoJson(places).addTo(map);
+        
+    var pointOptions = {
+        color: "orange"
+    },
+    var lineOptions = {
+        color: "green"  
+    },
+    var polygonOptions = {
+        color: "blue"  },
+        
+    var guluFeatures = L.geoJson(myFeatures, {
+        pointToLayer : function(feature, latlng) {
+            return L.circle(latlng, feature.properties.size);
+        },
+        onEachFeature: function(feature, layer) {
+            if(feature.geometry.type == "Point") {
+                layer.setStyle(pointOptions);
+            }
+            if(feature.geometry.type == "LineString") {
+                layer.setStyle(lineOptions);
+            }   
+            if(feature.geometry.type == "Polygon") {
+                layer.setStyle(polygonOptions);
+            }
+        }
+    }).addTo(map);
+        
+onEachFeature: function(feature, layer) {
+            if(feature.geometry.type == "Point") {
+                layer.setStyle(pointOptions);
+                layer.bindPopup("I am a "+feature.geometry.type+ " Feature")
+            }
+            if(feature.geometry.type == "LineString") {
+                layer.setStyle(lineOptions);
+                layer.bindPopup("I am a "+feature.geometry.type+ " Feature")
+            }   
+            if(feature.geometry.type == "Polygon") {
+                layer.setStyle(polygonOptions);
+                layer.bindPopup("I am a "+feature.geometry.type+ " Feature");
+        
+      var guluFeatures = L.geoJson(myFeatures, {
+        pointToLayer : function(feature, latlng) {
+            return L.circle(latlng, feature.properties.size);
+        },
+        style : function(feature) {
+            return { dashArray: "5, 10",
+                     weight: 2
+                   }   
+        },
     </script>
     
 </body>

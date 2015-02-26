@@ -82,61 +82,61 @@
         });
         map.addLayer(tiles);
         
-//         var places = {
-//          "type": "FeatureCollection",
-//          "features": [
-//            {
-//              "type": "Feature",
-//              "properties": {
-//                "name": "Some Place",
-//                "size": 38000
-//              },
-//              "geometry": {
-//                "type": "Point",
-//                "coordinates": [
-//                  29.267578125,
-//                  56.8249328650072
-//                ]
-//              }
-//            },
-//            {
-//              "type": "Feature",
-//              "properties": {
-//                "name": "Another Place",
-//                "size": 65000
-//              },
-//              "geometry": {
-//                "type": "Point",
-//                "coordinates": [
-//                  34.013671875,
-//                  55.677584411089505
-//                ]
-//              }
-//            },
-//            {
-//              "type": "Feature",
-//              "properties": {
-//                "name": "Yet Another Place",
-//                "size": 22000
-//              },
-//              "geometry": {
-//                "type": "Point",
-//                "coordinates": [
-//                  29.179687499999996,
-//                  54.59752785211386
-//                ]
-//              }
-//            }
-//          ]
-//        }
-//        var placesLGeoJson = L.geoJson(places).addTo(map);
+         var places = {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                "name": "Some Place",
+                "size": 38000
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  29.267578125,
+                  56.8249328650072
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "properties": {
+                "name": "Another Place",
+                "size": 65000
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  34.013671875,
+                  55.677584411089505
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "properties": {
+                "name": "Yet Another Place",
+                "size": 22000
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  29.179687499999996,
+                  54.59752785211386
+                ]
+              }
+            }
+          ]
+        }
+        var placesLGeoJson = L.geoJson(places).addTo(map);
 //        console.log(places);
-//        console.log(placesLGeoJson);
-//        var placesLGeoJson = L.geoJson(places, {
-//            pointToLayer : function(feature, latlng) {
-//                return L.circle(latlng, feature.properties.size);
-//            }
-//        }).addTo(map);
+        console.log(placesLGeoJson);
+        var placesLGeoJson = L.geoJson(places, {
+            pointToLayer : function(feature, latlng) {
+                return L.circle(latlng, feature.properties.size);
+            }
+        }).addTo(map);
 
         
 //        var myFeatures = {
