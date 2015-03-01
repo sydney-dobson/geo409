@@ -57,8 +57,8 @@
     <div id='map'></div>
 
     <footer>
-        
-// steps and 11 and 12 below        
+
+        // steps and 11 and 12 below
         <p>Map authored by YOUR NAME</p>
         <p>Additional information about the data and map goes here.</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna magna, maximus nec laoreet sit amet, dictum ultricies nibh. Ut id auctor lacus. Nam a dolor et justo luctus luctus. Duis a elit eget risus dictum vehicula id eu elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed sed enim nisl. Vestibulum commodo imperdiet lacus, sed facilisis erat placerat sit amet. Nulla consequat malesuada neque eget aliquet. Integer non convallis nisl, gravida ultrices ex. Fusce nec vestibulum elit. Sed elementum lectus ipsum, vulputate elementum ex laoreet a. Aenean eu ex varius, varius felis vitae, efficitur nulla. Quisque pretium laoreet ante, in sodales dui vehicula at. Mauris eu sem sapien.
@@ -66,17 +66,18 @@
     </footer>
 
     <script>
-
- // Step 1 and 2 here
-         var map = L.map('map',{
-        zoom: 11,
-        center: [-37.8136, 144.9631]
+        // Step 1 and 2 here
+        var targetDiv = 'map';
+        var options = {
+            zoom: 11,
+            center: [-37.8136, 144.9631],
         }
+        var map = L.map(targetDiv, options); // make sure you define variables before you need/use them!
 
         var OpenStreetMap_Mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-});
-         map.addLayer(OpenStreetMap_Mapnik);
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        });
+        map.addLayer(OpenStreetMap_Mapnik);
 
         var iguanaZones = [
             {
@@ -164,79 +165,84 @@
                 }
             }
         ]; // end iguanaShips data
-        
-          var mainCircle = {
-              color: 'blue',
-              fillColor: 'blue'
-          };
+
+        var mainCircle = {
+            color: 'blue',
+            fillColor: 'blue'
+        };
         var secondCircle = {
             color: 'red',
             fillColor: 'red'
         };
-   
-        
-        var iguanaGroup = L.layerGroup();
-        
-    for(var i=0;i<iguanaZones.length; i++) {
-        
-         var iguanaColony = L.circle(iguanaZones[i].coordinates,
-iguanaZones[i].properties.size,
-iguanaOptions)
-.addTo(iguanaGroup);
-}
-//        var coords = iguanaZones[i].coordinates;
-//        
-//
-//        var radius = iguanaZones[i].properties.size;
-//            
-//    L.circle(coords, radius).addTo(circleGroup);
-//    
-//    };
+
+        var defaultCircle = {
+            color: '#03f',
+            fillColor: '#03f'
+        };
+        var highlightCircle = {
+            color: 'red',
+            fillColor: 'red'
+        };
+
+
+        var circleGroup = L.layerGroup();
+
+        for (var i = 0; i < iguanaZones.length; i++) {
+
+            var coords = iguanaZones[i].coordinates;
+
+
+            var radius = iguanaZones[i].properties.size;
+
+            L.circle(coords, radius).addTo(circleGroup);
+
+        };
         circleGroup.addTo(map);
-        
-        var marker; 
-        
-    }; // keep this code
-        
-        map.on('click', function(e){
-        
-            if(marker.hasLayer(marker)) {
-         
+
+        var marker; // keep this code
+
+        map.on('click', function (e) {
+
+            if (map.hasLayer(marker) && marker.safeDistance == false) {
+
                 map.removeLayer(marker)
-     
-    };
-        
+
+            };
+
             var clickPoint = e.latlng;
-        
-            L.marker(clickPoint);
-   
+
             marker = L.marker(clickPoint).addTo(map);
-        
+
             testDistance(clickPoint);
-    });
-        
+        });
+
         function testDistance(clickPoint) {
-        
-            iguanaGroup.eachLayer(function(layer) {
-        
-                var distance = clickPoint.distanceTo(layer.getLatLng());
-             
-                distance = distance - layer.getRadius();
-    
-              var center = layer.getLatLng();
-        
-        if(Distance < 2200) {
-    
-            layer.setStyle(iguanaThreatOptions);
-    } else {
-        layer.setStyle(defaultCircle);
-    };
-   
-    });
-    }
-        
+
+            circleGroup.eachLayer(function (layer) {
+
+                var radius = layer.getRadius();
+
+                var center = layer.getLatLng();
+
+                var firstDistance = center.distanceTo(clickPoint);
+
+                var realDistance = (firstDistance - radius);
+
+
+                if (realDistance < 2200) {
+
+                    layer.setStyle(highlightCircle);
+                    marker.safeDistance = false;
+                    
+                } else if (realDistance > 2200) {
+                    
+                    layer.setStyle(defaultCircle);
+                };
+
+            });
+        }
     </script>
-    
+
 </body>
 
 </html>
