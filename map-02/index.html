@@ -96,50 +96,51 @@
                     weight: 3,
                     fillColor: 'green',
                     fillOpacity: 2,
-                    radius: getRadius(features.properties.capacity)
+                    radius: getRadius(feature.properties.capacity)
                 });
-        }}),
+            }
+       }).addTo(map);
            
-            filter: function(features, layer) {
-
-                if(features.properties.source = ["gas"] &&
-                   features.properties.source["gas"] <= 500) {
-                    return features;
-                    }
-                },
-           
-            onEachFeature: function(features, layer){
-                var props = features.properties;
-                var content = "<b>"+props.plant_name+"</b><br>"+
-                    props.capacity.toLocaleString()+" MW<br><b>"+
-                    "<b>"+"This plant is "+ 23+"MW"+" from Seattle, WA.</b>";
-                var source = props.source;
-                for(var fuel in source) {
-                    content+="<b>"+fuel+"</b>: " +source[fuel].toLocaleString()+" MW<br>";
-                }
-                layer.bindPopup(content);
+//            filter: function(features, layer) {
+//
+//                if(features.properties.source = ["gas"] &&
+//                   features.properties.source["gas"] <= 500) {
+//                    return features;
+//                    }
+//                },
+//           
+//            onEachFeature: function(features, layer){
+//                var props = features.properties;
+//                var content = "<b>"+props.plant_name+"</b><br>"+
+//                    props.capacity.toLocaleString()+" MW<br><b>"+
+//                    "<b>"+"This plant is "+ 23+"MW"+" from Seattle, WA.</b>";
+//                var source = props.source;
+//                for(var fuel in source) {
+//                    content+="<b>"+fuel+"</b>: " +source[fuel].toLocaleString()+" MW<br>";
+//                }
+//                layer.bindPopup(content);
+//        
+//        
+//             layer.on('mouseover', function() {
+//                layer.setStyle({
+//                    fillColor: 'pink'
+//                    });
+//                });
+//                layer.on('mouseout', function() {
+//                    layer.setStyle({
+//                        fillColor: 'green'
+//                        });
+//                });
+//            }.addTo(map);
+//        
         
         
-             layer.on('mouseover', function() {
-                layer.setStyle({
-                    fillColor: 'pink'
-                    });
-                });
-                layer.on('mouseout', function() {
-                    layer.setStyle({
-                        fillColor: 'green'
-                        });
-                });
-            }.addTo(map);
         
         
-        
-        
-        
-//       function getRadius(area) {
-//        var radius = Math.sqrt(area/Math.PI);
-//        return radius * .6,  
-//        };.addTo(map);
+       function getRadius(area) {
+            var radius = Math.sqrt(area/Math.PI);
+            return radius * .6;  
+        }
 
         // add JavaScript here
         
