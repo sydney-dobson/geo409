@@ -48,22 +48,35 @@
         
     </style>
 </head>
-
+console.log(plants)
 <body>
     <header>
-        <!-- add HTML here-->
+        
+       <h1>Power Plants</h1>
+        <h2>yep</h2>
+        
     </header>
 
-        <!-- add HTML here-->
+        <div id='map'></div>
 
     <footer>
-        <!-- add HTML here-->
+        <p>Map authored by Sydney Dobson</p>
+        <p>Mmmmmmmmmaaaapppppsssss</p>
+        <p>This should show some power plants...
+        </p>
     </footer>
-        
-        <!-- load external JS file here-->
+    
+        <script src="power-plants-assignment.js"></script>
+    
     <script>
 
-          // add JavaScript here
+         plants.features.sort(function(a, b) {
+        return b.properties.capacity_mw - a.properties.capacity_mw;
+    });
+        
+        
+        
+        // add JavaScript here
         
     </script>
     
