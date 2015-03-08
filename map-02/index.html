@@ -45,19 +45,18 @@
             color: #001323;
         }
         /* Additional style rules go here! */
-        
     </style>
 </head>
 
 <body>
     <header>
-        
-       <h1>Gas Plants</h1>
+
+        <h1>Gas Plants</h1>
         <h2>Seattle WA</h2>
-        
+
     </header>
 
-        <div id='map'></div>
+    <div id='map'></div>
 
     <footer>
         <p>Map authored by Sydney Dobson</p>
@@ -65,87 +64,90 @@
         <p>Seattle Washington has majority gas plants. This map should show them according to size.
         </p>
     </footer>
-    
-        <script src="power-plants-assignment.js"></script>
-    
+
+    <script src="power-plants-assignment.js"></script>
+
     <script>
-        
         var map = L.map('map', {
             center: [47.6097, -122.3331],
             zoom: 8,
         });
-       
-        var tiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', 
-                                      {
+
+        var tiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
             subdomains: 'abcd',
             minZoom: 0,
             maxZoom: 18
         });
-        
+
         map.addLayer(tiles);
-        plants.features.sort(function(a, b) {
-        return b.properties.capacity_mw - a.properties.capacity_mw;
-            
+        plants.features.sort(function (a, b) {
+            return b.properties.capacity_mw - a.properties.capacity_mw;
+
         });
         
-       var gasPlantData = L.geoJson(plants, {
-            pointToLayer: function(feature,latlng) {
-                return L.circleMarker(latlng, { 
+        var seattleCoords = L.latLng(47.6097, -122.3331)
+        var gasPlantData = L.geoJson(plants, {
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, {
                     color: 'pink',
                     weight: 3,
                     fillColor: 'green',
                     fillOpacity: 2,
-                    radius: getRadius(feature.properties.capacity)
+                    radius: getRadius(feature.properties.source["Natural Gas"])
+                });
+            },
+            
+            
+            filter: function (feature, layer) {
+                var featureCoords = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
+                if (seattleCoords.distanceTo(featureCoords)/1000 < 400  &&
+                    feature.properties.source["Natural Gas"] &&
+                    feature.properties.source["Natural Gas"] <= 500) {
+                    return feature;
+                }
+            },
+
+            onEachFeature: function (feature, layer) {
+                var distance = seattleCoords.distanceTo(L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]))/1000;
+                var props = feature.properties;
+                var content = "<b>" + props.plant_name + "</b><br>" +
+                    props.capacity.toLocaleString() + " MW<br><b>" +
+                    "<b>" + "This plant is " + distance.toLocaleString() + " km" + " from Seattle, WA.</b><br>";
+                var source = props.source;
+                for (var fuel in source) {
+                    content += "<b>" + fuel + "</b>: " + source[fuel].toLocaleString() + " MW<br>";
+                }
+                layer.bindPopup(content);
+
+
+                layer.on('mouseover', function () {
+                    layer.setStyle({
+                        fillColor: 'pink'
+                    });
+                });
+                layer.on('mouseout', function () {
+                    layer.setStyle({
+                        fillColor: 'green'
+                    });
                 });
             }
-       }).addTo(map);
-           
-//            filter: function(features, layer) {
-//
-//                if(features.properties.source = ["gas"] &&
-//                   features.properties.source["gas"] <= 500) {
-//                    return features;
-//                    }
-//                },
-//           
-//            onEachFeature: function(features, layer){
-//                var props = features.properties;
-//                var content = "<b>"+props.plant_name+"</b><br>"+
-//                    props.capacity.toLocaleString()+" MW<br><b>"+
-//                    "<b>"+"This plant is "+ 23+"MW"+" from Seattle, WA.</b>";
-//                var source = props.source;
-//                for(var fuel in source) {
-//                    content+="<b>"+fuel+"</b>: " +source[fuel].toLocaleString()+" MW<br>";
-//                }
-//                layer.bindPopup(content);
-//        
-//        
-//             layer.on('mouseover', function() {
-//                layer.setStyle({
-//                    fillColor: 'pink'
-//                    });
-//                });
-//                layer.on('mouseout', function() {
-//                    layer.setStyle({
-//                        fillColor: 'green'
-//                        });
-//                });
-//            }.addTo(map);
-//        
-        
-        
-        
-        
-       function getRadius(area) {
-            var radius = Math.sqrt(area/Math.PI);
-            return radius * .6;  
+
+        }).addTo(map);
+
+
+
+
+
+
+        function getRadius(area) {
+            var radius = Math.sqrt(area / Math.PI);
+            return radius * .6;
         }
 
-        // add JavaScript here
-        
+         // add JavaScript here
     </script>
-    
+
 </body>
 
 </html>
