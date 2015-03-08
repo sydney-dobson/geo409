@@ -83,7 +83,7 @@
         map.addLayer(tiles);
         
         // Begin writing/modifying code for Map 2 here
-         L.geoJson(plants).addTo(map);  
+        
         plants.features.sort(function(a,b) {
 			return b.properties.capacity_mw - a.properties.capacity_mw;
 		});
