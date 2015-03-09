@@ -88,34 +88,195 @@
             
         });
         
-       var gasPlantData = L.geoJson(plants, {
+       var coalLayer = L.geoJson(plants, {
             pointToLayer: function(feature,latlng) {
                 return L.circleMarker(latlng, { 
-                    color: 'white',
+                    color: '#bdbdbd',
                     weight: 3,
-                    fillColor: 'green',
-                    fillOpacity: 2,
+                    fillColor: '#636363',
+                    fillOpacity: 1,
                     radius: getRadius(feature.properties.capacity)
                 });
-            }
-       }),
+            },
+           filter: function(feature) {
+               if (feature.properties.source["Coal"])
+                   return feature
+               }
+               
+           }).addTo(map);
         
-          var coalplantData = L.geoJson(plants, {
+        var naturalgasLayer = L.geoJson(plants, {
             pointToLayer: function(feature,latlng) {
                 return L.circleMarker(latlng, { 
-                    color: 'white',
+                    color: '#a1d99b',
                     weight: 3,
-                    fillColor: 'gray',
-                    fillOpacity: 2,
+                    fillColor: '#2ca25f',
+                    fillOpacity: 1,
                     radius: getRadius(feature.properties.capacity)
                 });
-            }
+            },
+           filter: function(feature) {
+               if (feature.properties.source["Natural Gas"]){
+                   return feature
+               }
+               
+           }
+           
        }).addTo(map);
+        
+        var hydroLayer = L.geoJson(plants, {
+            pointToLayer: function(feature,latlng) {
+                return L.circleMarker(latlng, { 
+                    color: '#a6bddb',
+                    weight: 3,
+                    fillColor: '#3182bd',
+                    fillOpacity: 1,
+                    radius: getRadius(feature.properties.capacity)
+                });
+            },
+           filter: function(feature) {
+               if (feature.properties.source["Hydro"]){
+                   
+                   return feature
+               }
+               
+           }
+           
+       }).addTo(map);
+        
            
          function getRadius(area) {
             var radius = Math.sqrt(area/Math.PI);
             return radius * .2;  
-        }
+        };
+        
+    
+        var sourcesLayers = {
+            "<b style='color:#3182bd'>Hydro</b>": hydroLayer,
+             "<b style='color:#636363'>Coal</b>": coalLayer,
+            "<b style='color:#2ca25f'>Natural Gas</b>": naturalgasLayer
+    }
+        
+        L.control.layers(null, sourcesLayers, { collapsed:false }).addTo(map);
+        
+       map.on('click', function(e) {
+           hydroLayer.eachLayer(function(layer) {
+            var distance = e.latlng.distanceTo(layer.getLatLng())/1000;
+
+            if(distance > 500) {
+                layer.setStyle({
+                    stroke: false,
+                    fill: false
+                });  
+            } else {
+               layer.setStyle({
+                    stroke: true,
+                    fill: true  
+               });  
+               layer.bindPopup(feature.properties.plant_name,distance.toLocaleString()s,feature.properties.source);
+            } 
+        });
+    });
+        
+        map.on('click', function(e) {
+           naturalgasLayer.eachLayer(function(layer) {
+            var distance = e.latlng.distanceTo(layer.getLatLng())/1000;
+
+            if(distance > 500) {
+                layer.setStyle({
+                    stroke: false,
+                    fill: false
+                });  
+            } else {
+               layer.setStyle({
+                    stroke: true,
+                    fill: true  
+               });  
+               layer.bindPopup("I am <b>"+distance.toLocaleString()+ 
+                               "km</b><br> from the click point.");
+            } 
+        });
+    });
+        
+        map.on('click', function(e) {
+           coalLayer.eachLayer(function(layer) {
+            var distance = e.latlng.distanceTo(layer.getLatLng())/1000;
+
+            if(distance > 500) {
+                layer.setStyle({
+                    stroke: false,
+                    fill: false
+                });  
+            } else {
+               layer.setStyle({
+                    stroke: true,
+                    fill: true  
+               });  
+               layer.bindPopup("I am <b>"+distance.toLocaleString()+ 
+                               "km</b><br> from the click point.");
+            } 
+        });
+    });
+         map.on('dblclick', function(e) {
+           coalLayer.eachLayer(function(layer) {
+            var distance = e.latlng.distanceTo(layer.getLatLng())/1000;
+
+            if(distance > 200) {
+                layer.setStyle({
+                    stroke: false,
+                    fill: false
+                });  
+            } else {
+               layer.setStyle({
+                    stroke: true,
+                    fill: true  
+               });  
+               layer.bindPopup("I am <b>"+distance.toLocaleString()+ 
+                               "km</b><br> from the click point.");
+            } 
+        });
+    });
+        
+        map.on('dblclick', function(e) {
+           hydroLayer.eachLayer(function(layer) {
+            var distance = e.latlng.distanceTo(layer.getLatLng())/1000;
+
+            if(distance > 200) {
+                layer.setStyle({
+                    stroke: false,
+                    fill: false
+                });  
+            } else {
+               layer.setStyle({
+                    stroke: true,
+                    fill: true  
+               });  
+               layer.bindPopup("I am <b>"+distance.toLocaleString()+ 
+                               "km</b><br> from the click point.");
+            } 
+        });
+    });
+        
+        map.on('dblclick', function(e) {
+           naturalgasLayer.eachLayer(function(layer) {
+            var distance = e.latlng.distanceTo(layer.getLatLng())/1000;
+
+            if(distance > 200) {
+                layer.setStyle({
+                    stroke: false,
+                    fill: false
+                });  
+            } else {
+               layer.setStyle({
+                    stroke: true,
+                    fill: true  
+               });  
+               layer.bindPopup("I am <b>"+distance.toLocaleString()+ 
+                               "km</b><br> from the click point.");
+            } 
+        });
+    });
+        
         
     </script>
     
