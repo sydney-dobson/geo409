@@ -126,31 +126,25 @@
     });
         
         function drawMap() {
-         var breaks = getClassBreaks();
+            var breaks = getClassBreaks();
 
-        dataLayer.eachLayer(function(layer) {
+            dataLayer.eachLayer(function(layer) {
             layer.setStyle({
             fillColor: getColor(layer.feature.properties[attribute]/layer.feature.properties[norm], breaks)
-        });
+            });
   
-        var legend = drawLegend();
+                var legend = drawLegend();
         
         }
+
         function getClassBreaks() {
         var values = [];
         dataLayer.eachLayer(function(layer) {
             var value = layer.feature.properties[attribute]/layer.feature.properties[norm];
             values.push(value);   
-    }); 
+        })}; 
          var breaks = ss.jenks(values, 5);
         return breaks;
-             
-            
-        var county = layer.feature.properties.NAME;
-        var popup = layer.feature.properties.VACANT_REN / layer.feature.properties.RENTER;
-        
-        layer.bindPopup("<b>" + county + " County" + "</b>" + "<br>" + "<b>% Vacant units to Rent: </b>" + popup);
-
     })};
         
 
@@ -196,13 +190,11 @@
         legend.addTo(map);
     }
        
-                
-//         map.on('click', function(e) {
-//            var county = layer.feature.properties.NAME;
-//            var popup = layer.feature.properties.VACANT_REN / layer.feature.properties.RENTER;
-//        
-//            layer.bindPopup("<b>" + county + " County" + "</b>" + "<br>" + "<b>% Vacant units to Rent: </b>" + popup);
-//    });
+             var hiddenBox = $( "VACANT_REN" );
+            $( "ky_counties_housing.json" ).on( "click", function( event ) {
+                hiddenBox.show();
+            }); 
+
            
     </script>
     
