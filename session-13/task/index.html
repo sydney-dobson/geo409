@@ -134,10 +134,9 @@
         });
     });
             
-        drawLegend(breaks);
+        var legend = drawLegend();
         
         }
-        
         function getClassBreaks() {
         var values = [];
         dataLayer.eachLayer(function(layer) {
