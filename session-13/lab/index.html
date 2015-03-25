@@ -48,7 +48,29 @@
             font-size: 1em;
             color: #001323;
         }
-        
+        .legend {
+            padding: 6px 8px;
+            font-size: 1em;
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
+        .legend h3 {
+            font-size: 1.1em;
+            font-weight: normal;
+            color: #001323;
+            margin: 0;
+        }
+        .legend li {
+            list-style-type: none;
+            height: 22px;
+        }
+        .legend span {
+            width: 20px;
+            height: 20px;
+            float: left;
+            margin-right: 10px;
+        }
         /* ADD YOUR ADDITIONAL STYLE RULES HERE */
         
     </style>
@@ -104,7 +126,16 @@
     });
         
         function drawMap() {
+         var breaks = getClassBreaks();
 
+        dataLayer.eachLayer(function(layer) {
+            layer.setStyle({
+            fillColor: getColor(layer.feature.properties[attribute]/layer.feature.properties[norm], breaks)
+        });
+    });
+            
+        var legend = drawLegend();
+        
         }
         function getClassBreaks() {
         var values = [];
@@ -112,9 +143,54 @@
             var value = layer.feature.properties[attribute]/layer.feature.properties[norm];
             values.push(value);   
     }); 
-            console.log(values);
-        }
+         var breaks = ss.jenks(values, 5);
+        return breaks;
+
+    };
         
+
+     function getColor(d, breaks) {
+        if(d <= breaks[1]) {
+            return '#f1eef6';
+        } else if(d <= breaks[2]) {
+            return '#bdc9e1';
+        } else if(d <= breaks[3]) {
+            return '#74a9cf';
+        } else if(d <= breaks[4]) {
+            return '#2b8cbe'
+        } else if(d <= breaks[5]) {
+            return '#045a8d'
+        }
+    };
+        
+     function drawLegend(breaks){
+
+        var legend = L.control({position: 'topleft'});
+
+        legend.onAdd = function (map) {
+
+            var div = L.DomUtil.create('div', 'legend');
+
+            div.innerHTML = "<h3>" + attribute + " per " + norm + "</h3><ul>"; 
+
+            for (var i = 0; i < breaks.length-1; i++) {
+         
+                var color = getColor(breaks[i + 1], breaks);
+
+                div.innerHTML +=
+                    '<li><span style="background:' + color + '"></span> ' +
+                    (breaks[i]*100).toLocaleString() + ' &mdash; ' + 
+                    (breaks[i + 1]*100).toLocaleString() + '</li>';
+            }
+
+            div.innerHTML += "</ul>"
+
+            return div;
+        };
+
+        legend.addTo(map);
+    }
+       
         
        
     </script>
