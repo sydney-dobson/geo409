@@ -93,7 +93,7 @@
 
     <script>
         
-         jQuery("h1").html("Housing Ownership in Kentucky");
+         jQuery("h1").html("Vacant Units for Rent");
         var options = {
         center: [37.8, -85.8],
         zoom: 7.4,
@@ -105,8 +105,8 @@
         var map = L.map('map', options);
         
       var dataLayer,
-        attribute = "OWNED_MORT",
-        norm = "OWNER";
+        attribute = "VACANT_REN",
+        norm = "RENTER";
 
     $.getJSON("ky_counties_housing.json", function(data) {
 
@@ -132,8 +132,7 @@
             layer.setStyle({
             fillColor: getColor(layer.feature.properties[attribute]/layer.feature.properties[norm], breaks)
         });
-    });
-            
+  
         var legend = drawLegend();
         
         }
@@ -145,8 +144,14 @@
     }); 
          var breaks = ss.jenks(values, 5);
         return breaks;
+             
+            
+        var county = layer.feature.properties.NAME;
+        var popup = layer.feature.properties.VACANT_REN / layer.feature.properties.RENTER;
+        
+        layer.bindPopup("<b>" + county + " County" + "</b>" + "<br>" + "<b>% Vacant units to Rent: </b>" + popup);
 
-    };
+    })};
         
 
      function getColor(d, breaks) {
@@ -191,8 +196,14 @@
         legend.addTo(map);
     }
        
-        
-       
+                
+//         map.on('click', function(e) {
+//            var county = layer.feature.properties.NAME;
+//            var popup = layer.feature.properties.VACANT_REN / layer.feature.properties.RENTER;
+//        
+//            layer.bindPopup("<b>" + county + " County" + "</b>" + "<br>" + "<b>% Vacant units to Rent: </b>" + popup);
+//    });
+           
     </script>
     
 </body>
