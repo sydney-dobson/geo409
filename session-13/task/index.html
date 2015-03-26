@@ -118,7 +118,18 @@
                         fillOpacity: 1,
                         fillColor: '#1f78b4'
                     };
-            }          
+            }
+            
+           onEachFeature: function (feature, layer) {
+                var countyName = layer.feature.properties.NAME;
+                var vacantForRent = layer.feature.properties.VACANT_REN;
+                var totalRenters = layer.feature.properties.RENTER;
+                var vanctforRenters = vacantForRent/totalRenters*100;
+            
+                layer.bindPopup("<b>"+countyName.toLocaleString()+" County</b>"+"<br>Vacant lands for Rent:   "+vacantForRent.toLocaleString()+"<br>Total Renters: "+totalRenters+"<br>Proportion: "+Math.round(vacantForRent)+"% of Vacant homes for Rent."); 
+            
+            
+            
         }).addTo(map);
 
         drawMap();
@@ -188,12 +199,12 @@
         };
 
         legend.addTo(map);
-    }
+    };
        
-             var hiddenBox = $( "VACANT_REN" );
-            $( "ky_counties_housing.json" ).on( "click", function( event ) {
-                hiddenBox.show();
-            }); 
+//             var hiddenBox = $( "VACANT_REN" );
+//            $( "ky_counties_housing.json" ).on( "click", function( event ) {
+//                hiddenBox.show();
+//            }); 
 
            
     </script>
