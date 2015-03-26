@@ -3,16 +3,18 @@
 
 <head>
     <meta charset=utf-8 />
-    <title>Module 13 Lab Template</title>
+    <title>Task I Solution</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
     <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
     <script src="simple_statistics.js"></script>
+    
     <style>
         body {
             margin: 0;
@@ -109,7 +111,7 @@
         norm = "RENTER";
 
     $.getJSON("ky_counties_housing.json", function(data) {
-
+  console.log(dataLayer);
         dataLayer = L.geoJson(data, {
              style: function(feature) {
                 return {
@@ -119,14 +121,14 @@
                         fillColor: '#1f78b4'
                     };
             }
-            
-           onEachFeature: function (feature, layer) {
-                var countyName = layer.feature.properties.NAME;
-                var vacantForRent = layer.feature.properties.VACANT_REN;
-                var totalRenters = layer.feature.properties.RENTER;
-                var vanctforRenters = vacantForRent/totalRenters*100;
-            
-                layer.bindPopup("<b>"+countyName.toLocaleString()+" County</b>"+"<br>Vacant lands for Rent:   "+vacantForRent.toLocaleString()+"<br>Total Renters: "+totalRenters+"<br>Proportion: "+Math.round(vacantForRent)+"% of Vacant homes for Rent."); 
+          
+//           onEachFeature: function (feature, layer) {
+//                var countyName = layer.feature.properties.NAME;
+//                var vacantForRent = layer.feature.properties.VACANT_REN;
+//                var totalRenters = layer.feature.properties.RENTER;
+//                var vanctforRenters = vacantForRent/totalRenters*100;
+//            
+//                layer.bindPopup("<b>"+countyName.toLocaleString()+" County</b>"+"<br>Vacant lands for Rent:   "+vacantForRent.toLocaleString()+"<br>Total Renters: "+totalRenters+"<br>Proportion: "+Math.round(vacantForRent)+"% of Vacant homes for Rent."); 
             
             
             
@@ -153,11 +155,10 @@
         dataLayer.eachLayer(function(layer) {
             var value = layer.feature.properties[attribute]/layer.feature.properties[norm];
             values.push(value);   
-        })}; 
+        }); 
          var breaks = ss.jenks(values, 5);
         return breaks;
-    })};
-        
+            }
 
      function getColor(d, breaks) {
         if(d <= breaks[1]) {
