@@ -142,23 +142,35 @@
             var breaks = getClassBreaks();
 
             dataLayer.eachLayer(function(layer) {
-            layer.setStyle({
-            fillColor: getColor(layer.feature.properties[attribute]/layer.feature.properties[norm], breaks)
+                
+                var props = layer.feature.properties;
+                
+                layer.setStyle({
+                    fillColor: getColor(props[attribute]/
+                                        props[norm], breaks)
+                });
+                layer.bindPopup("<b>"+props["NAME"]+" County</b></br>" +
+                                attribute + ": " +
+                                ((props[attribute]/props[norm])*100).toLocaleString());  
             });
-  
-                var legend = drawLegend();
+            
+            drawLegend(breaks);
         
         }
 
         function getClassBreaks() {
-        var values = [];
-        dataLayer.eachLayer(function(layer) {
-            var value = layer.feature.properties[attribute]/layer.feature.properties[norm];
-            values.push(value);   
-        }); 
-         var breaks = ss.jenks(values, 5);
-        return breaks;
-            }
+            
+            var values = [];
+            
+            dataLayer.eachLayer(function(layer) {
+                var value = layer.feature.properties[attribute]/layer.feature.properties[norm];
+                values.push(value);   
+            }); 
+            
+            var breaks = ss.jenks(values, 5);
+            return breaks;
+            
+        }   
 
      function getColor(d, breaks) {
         if(d <= breaks[1]) {
