@@ -144,6 +144,194 @@
                 drawInfo(); //moveover popup calling function
         });
 
+    function drawMap() {
+        //new function to get class breaks and assign return value to variable
+        
+        var breaks = getClassBreaks();
+        
+            //loop through each layer of the GeoJSON layer
+        
+        dataLayer.eachLayer(function(layer) {
+            
+            // access layer properties more easily
+            
+            var props = layer.feature.properties;
+            
+            //change the layer's fill color using its attribute values
+            
+            layer.setStyle({
+                fillColor: getColor(props[attribute]/
+                                    props[norm], breaks)
+            });
+            
+            //bind a popup to the layer
+            
+            layer.bindPopup("<b>"+props["NAME"]+" County</b></br>" +
+                            labels[attribute] + ": " +
+                            ((props[attribute]/props[norm])*100).toLocaleString());
+            
+            //changes stroke color and width when mouseover event happens
+            
+            layer.on('mouseover', function(){
+                updateInfo(this);
+                layer.setStyle({color: 'yellow', weight: 4});
+            });
+            
+            //changes stroke color and width back to normal when mouseout
+            
+            layer.on('mouseout', function(){
+                layer.setStyle({color: 'dddddd', weight: 2});
+            });
+        });
+        
+        //draw info panel when mouseover occurs
+        
+        dataLayer.on('mouseover', function() {
+            $(".info").show();
+        });
+        
+        //hides the info panel when mouseout happens
+        
+        dataLayer.on('mouseout', function() {
+            $(".info").hide();
+        });
+        
+        // draw the legend, uses breaks function
+        
+        updateLegend(breaks);
+    }
+        function getClassBreaks() {
+            
+            var values = []; 
+            
+            dataLayer.eachLayer(function(layer) { //loop through layer
+                
+                //finds normalized values for the map proportions
+                
+                var value = layer.feature.properties[attribute]/layer.feature.properties[norm];
+                
+                values.push(value); //pushes the value into the array
+            });
+            //use Simple Statistics library to determine cutoff values for 5 classes using Jenks method and assign to variable  'breaks'
+            var breaks = ss.jenks(values, 6);
+            return breaks; //returns the breaks array 
+        }
+           //goes through breaks in data to know what color to assign them
+        function getColor(d, breaks) {
+            if(d <= breaks[1]) {
+                return '#f1eef6';
+            } else if(d <= breaks[2]) {
+                return '#bdc9e1';
+            } else if(d <= breaks[3]) {
+                return '#74a9cf';
+            } else if(d <= breaks[4]) {
+                return '#2b8cbe'
+            } else if(d <= breaks[5]) {
+                return '#045a8d'
+            }
+        }
+        function drawLegend(breaks) {
+            
+            //creates a new Leaflet control object assigned to variable 'legend', and positions it top left
+            
+            var legend = L.control({position: 'topleft'});
+            
+            //adds legend to the right area of the map
+            
+            legend.onAdd = function (map) {
+                
+                
+                var div = L.DomUtil.create('div', 'legend');
+                
+                
+                return div;
+                
+            };
+            
+//add the legend to the map
+            
+legend.addTo(map);
+}
+        
+        function ui() {
+            
+            //makes a new Leaflet object and positions it 
+            
+            var dataView = L.control({position: 'topleft'});
+            
+            //adds taht data variable to the map
+            
+            dataView.onAdd = function(map) {
+                
+                
+                var controls = L.DomUtil.get('ui-controls');
+                
+                return controls; //returns the ui-control div to the Leaflet control object
+                
+            }
+            dataView.addTo(map); //moves the ui-controls pulldown object into map area
+            
+        }
+        
+        //selects 'vacancies' and goes through the changes
+        
+        $('select[name="vacancies"]').change(function() {
+            
+            //assigns the changes to the global variable attribute
+            
+            attribute = $(this).val();
+            
+            drawMap(); //redraws the map with this information
+            
+        })
+        
+        function updateLegend(breaks) {
+            
+            //gives a title to the legend and access the names assigned to the labeled atributes 
+            
+            var legend = $('.legend').html("<h3>" + labels[attribute] + "</h3><url>");
+            //loops through the breaks to update the legend
+            
+            for (var i = 0; i < breaks.length-1; i++){
+                
+                var color = getColor(breaks[i+1], breaks);
+                //assigns the colors to the breaks being looped through
+ 
+            
+        }
+        function drawInfo() {
+            //poitions the mouseover info into the top right 
+            var info = L.control({position: 'topright'});
+            
+            info.onAdd = function(map) {
+                
+                var div = L.DomUtil.create('div', 'info');
+                
+                return div;
+            }
+            
+            info.addTo(map);
+            //adds this to the map
+            $(".info").hide();
+            // makes the mouseover hide whenever mousedout
+        }
+        function updateInfo(layer){
+            
+            var props = layer.feature.properties;
+            
+            var html = "<h3>"+props['NAME']+" County</h3>"+
+                
+                
+                "total # vacant units: <b>"+ props["VACANT"] +"</b><br>"+
+                
+                "total # vacant units for rent: <b>"+ props["VACANT_FOR"]+"</b><br>"+
+                
+                "total # vacant units for sale: <b>"+ props["VACANT_FO2"]+"</b><br>"+
+                
+                "total # vacant units used for migratory workers: <b>"+ props["VACANT_MIG"]+"</b>"
+                
+            $(".info").html(html);
+        }
 
     </script>
     
