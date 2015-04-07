@@ -8,7 +8,9 @@
 
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-
+    <script src="simple_statistics.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.0/papaparse.min.js"></script>
+    
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
     <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 
@@ -24,8 +26,16 @@
             padding: 6px 10%;
         }
         h1 {
+            position: absolute;
+            z-index: 100;
+            top: 10px;
+            left: 60px;
             padding: 8px 15px;
-            margin: 0; 
+            margin: 0;
+            color: whitesmoke;
+            font-size: 1.5em;
+            background: rgba(25,25,25,0.8);
+            border-radius: 5px; 
         }
         #map {
             position: absolute;
@@ -40,7 +50,14 @@
         p {
             font-size: 1em;
             color: #001323;
+        
         }   
+         #map {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        bottom: 0;
+         }
     </style>
 </head>
 
@@ -61,13 +78,58 @@
         var map = L.map('map', options);
         
         // load map tiles and add to map
-                
-        // declare global variables
-
+             var tiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', 
+                                      {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+            subdomains: 'abcd',
+            minZoom: 0,
+            maxZoom: 18
+        });
+        
+        map.addLayer(tiles);    
+//        
+//        // declare global variables
+//        $.getJSON("us-states.json", function(states) {
+//
+//        // states is accessible here
+//
+//        });
+       
         // AJAX requests to load data files
- 
-        // function to process/bind data
+        $.getJSON("us-states.json", function(states) {
 
+            Papa.parse('states-unemployment.csv', {
+                download: true,
+                header: true,
+                complete: function(data) {
+                    processData(states, data);
+
+                    // data is accessible to us here
+                // note that states is also accessible here!
+
+                }
+            }); // end of Papa.parse() 
+
+        });  // end of $.getJSON()
+        
+        // function to process/bind data
+            function processData(states, data) {
+                  
+                 for (var state in states.features) {
+
+                     var props = states.features[state].properties;
+
+                     for(var d in data.data) {
+                         if(props.STATEFP == data.data[d].STATE_FIP) {
+                             states.features[state].properties = data.data[d]; 
+                             break;
+                         }  
+                     } // inner for loop is complete
+
+                 } // outer for loop is complete
+  
+            }
+                
         // function to draw the map
         
         // function to update the map
