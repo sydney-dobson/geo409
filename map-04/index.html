@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8 />
+    <title>Map 4</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.0/papaparse.min.js"></script>
+  
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: whitesmoke;
+            font-family: Lato, sans-serif;
+            color: #0D0000;
+        }
+        header {
+            padding: 6px 10%;
+        }
+        h1 {
+            padding: 8px 15px;
+            margin: 0; 
+        }
+        #map {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            bottom: 0;
+        }
+        footer {
+            padding: 6px 10%;
+            width: 80%;
+        }
+        p {
+            font-size: 1em;
+            color: #001323;
+        }   
+         h1 {
+        position: absolute;
+        z-index: 100;
+        top: 10px;
+        left: 60px;
+        padding: 8px 15px;
+        margin: 0;
+        color: whitesmoke;
+        font-size: 1.5em;
+        background: rgba(25,25,25,0.8);
+        border-radius: 5px; 
+         }
+          .legend {
+        padding: 6px 8px;
+        font-size: 1em;
+        background: rgba(75,75,75,0.8);
+        color: whitesmoke;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 5px;
+        width: 160px;
+        }
+        .legend h3 {
+        font-size: 1.1em;
+        font-weight: bold;
+        line-height: 1em;
+        color: whitesmoke;
+        margin: 0;
+        }
+        .legend li {
+        list-style-type: none;
+        height: 22px;
+        }
+        .legend span {
+        width: 30px;
+        height: 20px;
+        float: left;
+        margin-right: 10px;
+        }
+        #ui-controls {
+        width: 176px;   
+        padding: 8px 15px 8px 15px;
+        background: rgba(75,75,75,0.8);
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 5px; 
+        color: whitesmoke;
+        }
+        .year-slider {
+        width: 100%;
+        }
+        #ui-controls .min {
+        float: left;   
+        }
+        #ui-controls .max {
+        float: right;
+        }
+        label {
+        font-size: 1.1em;
+        font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Kentucky Unemployment rates in the years 2000-2013</h1>
+    
+
+    
+     <div id="ui-slider">
+        <label><span class="min">2001</span><span class="max">2013</span>
+            <input type="range" min="2001", max="2013", value="2001", step="1" class="year-slider"></input>
+        </label>
+    </div>
+         
+    <div id='map'></div>
+    
+    <script>
+        
+        var options = {
+            center: [37.5, -85],
+            zoom: 7,
+            minZoom: 7,
+            maxZoom: 7,
+            dragging: true,
+            zoomControl: false
+        }
+        var map = L.map('map', options);
+
+        
+         var tiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+            subdomains: 'abcd',
+            minZoom: 0,
+            maxZoom: 18
+        });
+        map.addLayer(tiles);
+
+        var dataLayer,
+            attribute = 2000;
+        
+        
+        
+       
+         $.getJSON("ky-counties.json", function(counties) {
+
+            Papa.parse('ky-unemployment-data.csv', {
+                download: true,
+                header: true,
+                complete: function(data) {
+                    
+                    processData(counties, data);
+                      
+                    dataLayer = L.geoJson(counties, {
+                        
+                        style: function(feature) {
+                            
+                            return {
+                                color: '#dddddd',
+                                weight: 1,
+                                fillOpacity: 1,
+                                fillColor: '#1f78b4',
+                                fillOpacity: 0.8
+                            };
+
+                }
+            
+            }).addTo(map);
+                
+                     drawMap();
+                    
+                    drawLegend(); 
+                    
+                    drawInfo();
+                    
+                    createSliderUI(); 
+               
+        }}) 
+
+         })
+        
+         $('select[name="occupied"]').change(function() {
+
+        attribute = $(this).val();
+
+    })
+
+    })
+          
+          
+          
+       function processData(counties, data) {
+
+            for (var county in counties.features) {
+
+                var props = counties.features[county].properties;
+
+//                    console.log(props.COUNTY_FIP);
+
+            for(var d in data.data) {
+                
+                if(props.COUNTY_FIP == data.data[d].CNTY) {
+                    counties.features[county].properties = data.data[d]; 
+                    break;
+                }  
+            } // inner for loop is complete
+
+            } // outer for loop is complete
+//                    console.log(counties);
+//                    console.log(data.data[d].CNTY);
+         };
+       
+        
+         function drawMap() {
+             
+            var breaks = getClassBreaks();
+             
+            dataLayer.eachLayer(function(layer) {
+                
+                layer.setStyle({
+                    fillColor: getColor(layer.feature.properties[attribute], breaks),
+                    fillOpacity: 1
+                });
+                
+//                layer.on('mouseover', function() {
+//                    updateInfo(this);
+//                    
+//                });
+//                
+//                dataLayer.on('mouseover', function() {
+//                    
+//        
+//                    $(".info").show();
+//    
+//                });
+//                
+//                dataLayer.on('mouseout', function() {
+//                    $(".info").hide();    
+//    
+//                });
+            });
+            updateLegend(breaks);
+             
+            updateInfo();
+        }
+        
+        
+        
+        function ui() {
+            var dataView = L.control({position: 'topleft'});
+            
+            dataView.onAdd = function(map) {
+                
+                var controls = L.DomUtil.get('ui-controls');
+                
+                return controls;
+        
+            }
+            dataView.addTo(map);
+        }
+        
+         function getClassBreaks() {
+             
+            var values = [];
+             
+            dataLayer.eachLayer(function(layer) {
+                
+                var value = layer.feature.properties[attribute]
+            
+                values.push(Number(value));   
+            }); 
+             
+            console.log(values);
+             
+            var breaks = ss.quantile(values, [0, 0.2, 0.4, 0.6, 0.8, 1]);
+             
+                return breaks; 
+        };
+            
+        
+          function getColor(d, breaks) {
+            if(d <= breaks[1]) {
+                return '#feedde';
+            } else if(d <= breaks[2]) {
+                return '#fdbe85';
+            } else if(d <= breaks[3]) {
+                return '#fd8d3c';
+            } else if(d <= breaks[4]) {
+                return '#e6550d'
+            } else if(d <= breaks[5]) {
+                return '#a63603'
+            }
+        }
+        
+        
+        function drawLegend() {
+            var legend = L.control({position: 'topleft'});
+            legend.onAdd = function(map) {
+                var div = L.DomUtil.create('div', 'legend');
+                return div;
+            };
+            legend.addTo(map);
+        }    
+        
+        
+        
+         function updateLegend(breaks) {
+            var legend = $('.legend').html("<h3>Percentage unemployed in  " + attribute + "</h3><ul>"); 
+            for (var i = 0; i < breaks.length-1; i++) {
+            
+                var color = getColor(breaks[i + 1], breaks);
+            
+                legend.append('<li><span style="background:' + color + '"></span> ' +
+                    (breaks[i]).toLocaleString() + '% &mdash; ' + 
+                    (breaks[i + 1]).toLocaleString() + '%</li>');
+                }
+            legend.append("</ul>");
+        }
+        
+        
+        
+        function drawInfo() {
+            var info = L.control({
+                position: 'topright'
+            });
+            info.onAdd = function(map) {
+                var div = L.DomUtil.create('div', 'info');
+                return div;  
+            }
+            info.addTo(map);
+            $(".info").hide();
+        }
+        
+         function updateInfo(layer) {
+            var props = layer.feature.properties;
+            var html = "<h3>Unemployment in " + props["NAME"] + " County</h3><br>" +
+                    "<li>2000: <b>"+ props[2000] + "%</b></li>"+
+                    "<li>2001: <b>"+ props[2001] + "%</b></li>"+
+                    "<li>2002: <b>"+ props[2002] + "%</b></li>"+
+                    "<li>2003: <b>"+ props[2003] + "%</b></li>"+
+                    "<li>2004: <b>"+ props[2004] + "%</b></li>"+
+                    "<li>2005: <b>"+ props[2005] + "%</b></li>"+
+                    "<li>2006: <b>"+ props[2006] + "%</b></li>"+
+                    "<li>2007: <b>"+ props[2007] + "%</b></li>"+
+                    "<li>2008: <b>"+ props[2008] + "%</b></li>"+
+                    "<li>2009: <b>"+ props[2009] + "%</b></li>"+
+                    "<li>2010: <b>"+ props[2010] + "%</b></li>"+
+                    "<li>2011: <b>"+ props[2011] + "%</b></li>"+
+                    "<li>2012: <b>"+ props[2012] + "%</b></li>"+
+                    "<li>2013: <b>"+ props[2013] + "%</b></li>"
+            $(".info").html(html);
+        }
+       
+    function createSliderUI(){
+        
+        var sliderControl = L.control({ position: 'bottomleft'} );
+        
+            sliderControl.onAdd = function(map) {
+                
+        var slider = L.DomUtil.get("ui-slider");
+                
+            L.DomEvent.addListener(slider, 'mousedown', function(e) { 
+                
+                L.DomEvent.stopPropagation(e); 
+                
+                });
+            return slider;
+        }
+        sliderControl.addTo(map);
+    }
+    </script>
+    
+</body>
+
+</html>
