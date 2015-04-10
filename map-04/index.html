@@ -103,6 +103,16 @@
         font-size: 1.1em;
         font-weight: bold;
         }
+        .info {
+            padding: 6px 8px;
+            width: 140px;
+            font-size: 1em;
+            background: rgba(75,75,75,0.8);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            text-align: right;   
+            color: whitesmoke;
+        }
     </style>
 </head>
 
@@ -198,7 +208,7 @@
                     }}).addTo(map); //add the Leaflet layer to the map
                 drawLegend(); //calling function that draws the legend farther down in map
                 drawMap(); //calling the function to draw the map
-               // drawInfo(); //moveover popup calling function
+                drawInfo(); //moveover popup calling function
                 createSliderUI(); // make slider show on map    
          };
        
@@ -234,7 +244,7 @@
                 layer.setStyle({color: 'yellow', weight: 4});
             });
             
-            //changes stroke color and width back to normal when mouseout
+            //changes stroke color and width back to normal when mouseout 
             
             layer.on('mouseout', function(){
                 layer.setStyle({color: 'dddddd', weight: 2});
@@ -242,10 +252,17 @@
             });
              //change the layer's fill color using its attribute values
              
+             dataLayer.on('mouseover', function() {
+                $(".info").show(); // display the info panel
+            });
+            
+            // when mousing off the map
+            dataLayer.on('mouseout', function() {
+                $(".info").hide();  // hide the info panel 
+            });
              
             updateLegend(breaks);
              
-//            updateInfo();
         }
         
         
@@ -347,24 +364,6 @@
         }
         
         
-        
-        function drawInfo() {
-            
-            //poitions the mouseover info into the top right 
-            
-            var info = L.control({
-                position: 'topright'
-            });
-            info.onAdd = function(map) {
-                var div = L.DomUtil.create('div', 'info');
-                return div;  
-            }
-            info.addTo(map);
-            //adds this to the map
-            $(".info").hide();
-            // makes the mouseover hide whenever mousedout
-        }
-        
          
        
     function createSliderUI(){ //creates year slider 
@@ -397,8 +396,8 @@
     }
         
        function drawInfo() {
-            //poitions the mouseover info into the top right 
-            var info = L.control({position: 'topright'});
+            //poitions the mouseover info into the bottom right 
+            var info = L.control({position: 'bottomright'});
             
             info.onAdd = function(map) {
                 
