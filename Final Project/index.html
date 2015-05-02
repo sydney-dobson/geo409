@@ -112,11 +112,11 @@
     
 
     <div id='map'></div>
-    <div id="ui-slider">
+    <div id="ui-controls">
         <label><span class="min">1990</span><span class="max">2011</span>
-            <input type="range" min="1990", max="2011", value="1990", step="1" class="year-slider"></input>
+            <input type="range" min = "1990", max= "2011", 
+               value = "1990", step= "1", class="year-slider"></input>
         </label>
-    </div>
     <script>
         //set map in location and original settings 
         var options = {
@@ -132,7 +132,9 @@
         
         var map = L.map('map', options);
         
-        var dataLayer;
+        var dataLayer,
+            attribute = "1990"
+        ;
         
         var currentAttribute = 'Labor-1990';
 
@@ -366,16 +368,16 @@
         
         //adds slider to map
         
-//                 $(".year-slider")
-//                 .on('input change', function() {
-//
-//                    attribute = $(this).val();
-//                    drawMap();
-//                     
-//                 });
+
 
     }
-        
+        $(".year-slider")
+            .on('input change', function() {
+                attribute = $(this).val();
+            
+                updateMap();
+            
+        });
        function drawInfo() {
             //poitions the mouseover info into the top right 
             var info = L.control({position: 'topright'});
