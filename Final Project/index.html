@@ -163,9 +163,10 @@
            $(".year-slider")
         .on('input change', function() {
             attribute = $(this).val();
-            updateMap();
+//            updateMap();
         });
 
+        
          function processData(countries, data) {
 
             for (var country in countries.features) {
@@ -205,7 +206,7 @@
       function drawMap() {
               //new function to get class breaks and assign return value to variable
             var breaks = getClassBreaks();
-             console.log(breaks);
+//             console.log(breaks);
               //loop through each layer of the GeoJSON layer
              
             dataLayer.eachLayer(function(layer) {
@@ -373,23 +374,9 @@
             .on('input change', function() {
                 attribute = $(this).val();
             
-                updateMap();
+//                updateMap();
             
         });
-                
-//     function updateMap() {
-//            
-//            var breaks = getClassBreaks();
-//            
-//            dataLayer.eachLayer(function(layer) {
-//                
-//                layer.getStyle((
-//                    
-//                        fillColor: getColor(layer.feature.properties[currentAttribute], breaks)
-//                ));
-//            })
-//        }
-//           
        function drawInfo() {
             //poitions the mouseover info into the top right 
             var info = L.control({position: 'topright'});
@@ -413,7 +400,7 @@
             
             var html = "<h3>"+props['Country_Name_attr']+" Country</h3>"+"% working women</h3>"
             
-//            for(var i = Labor-1990; i<=Labor-2011; i++) {
+//            for(var i = 'Labor-1990'; i<='Labor-2011'; i++) {
 //                
 //                html += "<br>" + i + " : <b>" + props[String(i)] + "%" + "</b>" ;
 //            }
