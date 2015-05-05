@@ -3,7 +3,7 @@
 
 <head>
     <meta charset=utf-8 />
-    <title>Final map</title>
+    <title>Map 4</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
@@ -56,7 +56,7 @@
         background: rgba(25,25,25,0.8);
         border-radius: 5px; 
          }
-         .legend {
+          .legend {
         padding: 6px 8px;
         font-size: 1em;
         background: rgba(75,75,75,0.8);
@@ -103,27 +103,29 @@
         font-size: 1.1em;
         font-weight: bold;
         }
-
     </style>
 </head>
 
 <body>
-    <h1>Percentage of African women in the labor force </h1>
+    <h1>Kentucky Unemployment rates in the years 2000-2013</h1>
     
 
-    <div id='map'></div>
-    <div id="ui-slider">
-        <label><span class="min">1990</span><span class="max">2011</span>
-            <input type="range" min = "1990", max= "2011", 
-               value = "1990", step= "1", class="year-slider"></input>
+    
+     <div id="ui-slider">
+        <label><span class="min">2001</span><span class="max">2013</span>
+            <input type="range" min="2001", max="2013", value="2001", step="1" class="year-slider"></input>
         </label>
+    </div>
+         
+    <div id='map'></div>
+    
     <script>
         //set map in location and original settings 
         var options = {
             center: [7.1881, 21.0936],
             zoom: 3,
             minZoom: 3,
-            maxZoom: 3,
+            maxZoom: 8,
             dragging: false,
             zoomControl: false
         }
@@ -131,22 +133,24 @@
         //create a new Leaflet map and create variable 'map'
         
         var map = L.map('map', options);
-        
-        var dataLayer,
-            attribute = "1990"
-        ;
-        
-        var currentAttribute = '1990';
 
         
          var tiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
             subdomains: 'abcd',
             minZoom: 3,
-            maxZoom: 3
+            maxZoom:8
         });
         map.addLayer(tiles);
+
+        var dataLayer, //make global variable for map
+            attribute = 1990;
         
+        var currentAttribute = '1990';
+        
+        
+         //JQuery loading external GeoJSON file
+       
         $.getJSON("africa.geojson", function(countries) {
 
             Papa.parse('ADI_Labor_Female.csv', {
@@ -160,14 +164,9 @@
             }}) 
 
          });
-           $(".year-slider")
-        .on('input change', function() {
-            attribute = $(this).val();
-//            updateMap();
-        });
-
-        
-         function processData(countries, data) {
+    
+          
+       function processData(countries, data) {
 
             for (var country in countries.features) {
 
@@ -201,15 +200,18 @@
                 drawMap(); //calling the function to draw the map
                 drawInfo(); //moveover popup calling function
                 createSliderUI(); // make slider show on map 
-         };
-//    
-      function drawMap() {
+         };   
+          
+  
+       
+        
+         function drawMap() {
               //new function to get class breaks and assign return value to variable
             var breaks = getClassBreaks();
-//             console.log(breaks);
+             
               //loop through each layer of the GeoJSON layer
              
-            dataLayer.eachLayer(function(layer) {
+                dataLayer.eachLayer(function(layer) {
                     
                  // access layer properties more easily
                     
@@ -220,7 +222,7 @@
                     fillOpacity: 1
                 });
                     
-                 
+                          
             //bind a popup to the layer
             
             layer.bindPopup("<b>"+props["Country_Name_attr"]+"</b></br>"  +
@@ -229,7 +231,7 @@
             //changes stroke color and width when mouseover event happens
             
             layer.on('mouseover', function(){
-//                updateInfo(this);
+                updateInfo(this);
                 layer.setStyle({color: 'yellow', weight: 4});
             });
             
@@ -239,8 +241,6 @@
                 layer.setStyle({color: 'dddddd', weight: 2});
             });
             });
-          
-          
              //change the layer's fill color using its attribute values
              
              
@@ -249,8 +249,8 @@
 //            updateInfo();
         }
         
-////        
-////        
+        
+        
         function ui() {
             
             //makes a new Leaflet object and positions it 
@@ -281,20 +281,20 @@
                 if(value != undefined){
                     values.push(Number(value));  
                 }
-  
+              
                 //pushes the value into the array
             }); 
              
-           // console.log(values);
-
+//            console.log(values);
+//             
             var breaks = ss.quantile(values, [0, 0.2, 0.4, 0.6, 0.8, 1]);
              //returns the breaks array
              
              
                 return breaks; 
         };
-//            
-//        //goes through breaks in data to know what color to assign them
+            
+        //goes through breaks in data to know what color to assign them
         
           function getColor(d, breaks) {
             if(d <= breaks[1]) {
@@ -329,7 +329,7 @@
         
         
         
-         function updateLegend(breaks) {
+        function updateLegend(breaks) {
              //gives a title to the legend and access the names assigned to the labeled atributes 
              
             var legend = $('.legend').html("<h3> Women in the Labor Force " + currentAttribute + "</h3><ul>"); 
@@ -348,6 +348,26 @@
                 }
             legend.append("</ul>");
         }
+        
+        
+        
+        function drawInfo() {
+            
+            //poitions the mouseover info into the top right 
+            
+            var info = L.control({
+                position: 'topright'
+            });
+            info.onAdd = function(map) {
+                var div = L.DomUtil.create('div', 'info');
+                return div;  
+            }
+            info.addTo(map);
+            //adds this to the map
+            $(".info").hide();
+            // makes the mouseover hide whenever mousedout
+        }
+        
          
        
     function createSliderUI(){ //creates year slider 
@@ -362,10 +382,6 @@
                 
                 L.DomEvent.stopPropagation(e); 
                 
-                
-//            for(var i = '1990'; i<='2011'; i++) {
-//               var color = getColor(breaks[i + 1], breaks);
-//            }
                 });
             return slider;
         }
@@ -373,16 +389,15 @@
         
         //adds slider to map
         
+                 $(".year-slider")
+                 .on('input change', function() {
 
+                    attribute = $(this).val();
+                    drawMap();
+                     
+                 });
 
     }
-        $(".year-slider")
-            .on('input change', function() {
-                attribute = $(this).val();
-            
-//                updateMap();
-            
-        });
         
        function drawInfo() {
             //poitions the mouseover info into the top right 
@@ -401,20 +416,19 @@
             $(".info").hide();
             // makes the mouseover hide whenever mousedout
         }
-        
-//        function updateInfo(layer){
-//            
-//            var props = layer.feature.properties;
-//            
-//            var html = "<h3>"+props['NAME']+" Country</h3>"+"% African women in the labor force</h3>"
-//            
-//            for(var i = 1990; i<=2011; i++) {
-//                
-//                html += "<br>" + i + " : <b>" + props[String(i)] + "%" + "</b>" ;
-//            }
-//            
-//            $(".info").html(html);
-//        }
+        function updateInfo(layer){
+            
+            var props = layer.feature.properties;
+            
+            var html = "<h3>"+props['NAME']+" County</h3>"+"% Unemployment</h3>"
+            
+            for(var i = 2000; i<=2013; i++) {
+                
+                html += "<br>" + i + " : <b>" + props[String(i)] + "%" + "</b>" ;
+            }
+            
+            $(".info").html(html);
+        }
     </script>
     
 </body>

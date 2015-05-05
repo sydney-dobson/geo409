@@ -106,7 +106,7 @@
 <body>
     <h1>Map Title Goes Here</h1>
     <div id='map'></div>
-    <div id="ui-controls">
+    <div id="ui-slider">
         <input type="range" min="2001", max="2013", 
                 value="2001", step="1" class="year-slider"></input>
     </div>
@@ -265,7 +265,7 @@
         
 //        
 //        // function to update the legend
-              function updateLegend(breaks) {
+            function updateLegend(breaks) {
              
             var legend = $('.legend').html("<h3>" + [attribute] + "</h3><ul>");
             
@@ -282,7 +282,7 @@
 //        // function to create the range slider
             var sliderControl = L.control({ position: 'bottomleft'} );
                  sliderControl.onAdd = function(map) {
-                      var slider = L.DomUtil.get("ui-controls");
+                      var slider = L.DomUtil.get("ui-sliders");
 
                       L.DomEvent.addListener(slider, 'mousedown', function(e) { 
                       L.DomEvent.stopPropagation(e); 
@@ -291,10 +291,10 @@
              return slider;
             }
             sliderControl.addTo(map);
-                <label><span class="min">2001</span><span class="max">2013</span>
-                    <input type="range" min = "2001", max= "2013", 
-               value = "2001", step= "1", class="year-slider"></input>
-                </label>
+//                <label><span class="min">2001</span><span class="max">2013</span>
+//                    <input type="range" min = "2001", max= "2013", 
+//               value = "2001", step= "1", class="year-slider"></input>
+//                </label>
     </script>
     
 </body>
