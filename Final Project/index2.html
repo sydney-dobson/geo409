@@ -231,7 +231,7 @@
             //changes stroke color and width when mouseover event happens
             
             layer.on('mouseover', function(){
-                updateInfo(this);
+//                updateInfo(this);
                 layer.setStyle({color: 'yellow', weight: 4});
             });
             
@@ -420,9 +420,9 @@
             
             var props = layer.feature.properties;
             
-            var html = "<h3>"+props['NAME']+" County</h3>"+"% Unemployment</h3>"
+            var html = "<h3>"+props['NAME']+" Country</h3>"+"% Unemployment</h3>"
             
-            for(var i = 2000; i<=2013; i++) {
+            for(var i = 1990; i<=2011; i++) {
                 
                 html += "<br>" + i + " : <b>" + props[String(i)] + "%" + "</b>" ;
             }
